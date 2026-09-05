@@ -21,6 +21,7 @@ import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.util.getReference
 import app.morphe.util.registersUsed
 import com.android.tools.smali.dexlib2.Opcode
+import com.android.tools.smali.dexlib2.iface.instruction.NarrowLiteralInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
@@ -41,9 +42,14 @@ private const val PICK_VISUAL_MEDIA_REQUEST = "Landroidx/activity/result/m;"
 private const val NATIVE_MEDIA_PICKER_CONTRACT =
     "$NATIVE_DESCRIPTOR/mediaPicker/NativeMediaPickerContract;"
 private const val INLINE_COMPOSER = "Lcom/twitter/inlinecomposer/k0;"
+private const val INLINE_COMPOSER_PRESENTER = "Lcom/twitter/inlinecomposer/t;"
 private const val INLINE_COMPOSER_GALLERY_CLICK = "Lcom/twitter/inlinecomposer/y;"
+private const val INLINE_COMPOSER_MEDIA_RESULT_CALLBACK = "Lcom/twitter/inlinecomposer/o;"
 private const val GALLERY_GRID_CONTENT_VIEW_ARGS =
     "Lcom/twitter/gallerygrid/api/GalleryGridContentViewArgs;"
+private const val ACTIVITY_RESULT_EVENT_ROUTER = "Lcom/twitter/util/rx/q;"
+private const val CONCURRENT_CALLBACK = "Lcom/twitter/util/concurrent/c;"
+private const val MEDIA_ATTACHMENT_MANAGER = "Lcom/twitter/media/attachment/j;"
 
 private object ComposerMediaContractRegistrationFingerprint : Fingerprint(
     returnType = "V",
@@ -206,6 +212,48 @@ private object InlineComposerExternalPickerFingerprint : Fingerprint(
             ),
         ),
     custom = { _, classDef -> classDef.type == INLINE_COMPOSER },
+)
+
+private object InlineComposerResultRegistrationFingerprint : Fingerprint(
+    returnType = "V",
+    filters =
+        listOf(
+            methodCall(
+                opcode = Opcode.INVOKE_STATIC,
+                definingClass = "Lcom/twitter/app/common/i;",
+                name = "a",
+                parameters = listOf(ACTIVITY_RESULT_EVENT_ROUTER, "I", CONCURRENT_CALLBACK),
+                returnType = "V",
+            ),
+        ),
+    custom = { methodDef, classDef ->
+        classDef.type == INLINE_COMPOSER_PRESENTER && methodDef.name == "<init>"
+    },
+)
+
+private object InlineComposerMediaResultCallbackFingerprint : Fingerprint(
+    returnType = "V",
+    parameters = listOf("Ljava/lang/Object;"),
+    filters =
+        listOf(
+            methodCall(
+                opcode = Opcode.INVOKE_VIRTUAL_RANGE,
+                definingClass = MEDIA_ATTACHMENT_MANAGER,
+                name = "e",
+                parameters =
+                    listOf(
+                        "I",
+                        "I",
+                        "Landroid/content/Intent;",
+                        "Lcom/twitter/media/attachment/k;",
+                        "Lcom/twitter/media/util/i1;",
+                    ),
+                returnType = "V",
+            ),
+        ),
+    custom = { methodDef, classDef ->
+        classDef.type == INLINE_COMPOSER_MEDIA_RESULT_CALLBACK && methodDef.name == "a"
+    },
 )
 
 @Suppress("unused")
@@ -431,6 +479,103 @@ val nativeMediaPickerPatch =
                         invoke-virtual {v$intentRegister, v$categoryRegister}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
                         move-result-object v$intentRegister
                     """,
+                )
+            }
+
+            InlineComposerResultRegistrationFingerprint.method.apply {
+                val registrationMatches =
+                    implementation!!.instructions.withIndex().filter { (_, instruction) ->
+                        val reference = instruction.getReference<MethodReference>()
+                        instruction.opcode == Opcode.INVOKE_STATIC &&
+                            reference?.definingClass == "Lcom/twitter/app/common/i;" &&
+                            reference.name == "a" &&
+                            reference.parameterTypes ==
+                                listOf(ACTIVITY_RESULT_EVENT_ROUTER, "I", CONCURRENT_CALLBACK) &&
+                            reference.returnType == "V"
+                    }.filter { (index, instruction) ->
+                        val registers = instruction.registersUsed
+                        val requestCodeInstruction =
+                            getInstruction(index - 1) as? NarrowLiteralInstruction
+                        registers.size == 3 &&
+                            requestCodeInstruction?.narrowLiteral == 0x102 &&
+                            (requestCodeInstruction as? OneRegisterInstruction)?.registerA == registers[1]
+                    }
+                val cameraRegistration = registrationMatches.singleOrNull()
+                    ?: throw PatchException("Could not identify inline composer media result registration")
+                val registrationIndex = cameraRegistration.index
+                val registrationRegisters = cameraRegistration.value.registersUsed
+                val callbackConstructor = getInstruction(registrationIndex - 2)
+                val callbackConstructorReference = callbackConstructor.getReference<MethodReference>()
+                    ?: throw PatchException("Inline composer result callback has no constructor reference")
+                val callbackConstructorRegisters = callbackConstructor.registersUsed
+                val callbackAllocation = getInstruction(registrationIndex - 3)
+                val callbackAllocationReference = callbackAllocation.getReference<TypeReference>()
+                    ?: throw PatchException("Inline composer result callback has no allocation type")
+                if (
+                    callbackConstructor.opcode != Opcode.INVOKE_DIRECT ||
+                    callbackConstructorReference.definingClass != INLINE_COMPOSER_MEDIA_RESULT_CALLBACK ||
+                    callbackConstructorReference.name != "<init>" ||
+                    callbackConstructorReference.parameterTypes != listOf(INLINE_COMPOSER_PRESENTER) ||
+                    callbackConstructorRegisters.size != 2 ||
+                    callbackAllocation.opcode != Opcode.NEW_INSTANCE ||
+                    callbackAllocationReference.type != INLINE_COMPOSER_MEDIA_RESULT_CALLBACK ||
+                    (callbackAllocation as OneRegisterInstruction).registerA != callbackConstructorRegisters[0] ||
+                    callbackConstructorRegisters[0] != registrationRegisters[2]
+                ) {
+                    throw PatchException("Unexpected inline composer media result callback registration")
+                }
+
+                val routerRegister = registrationRegisters[0]
+                val requestCodeRegister = registrationRegisters[1]
+                val callbackRegister = registrationRegisters[2]
+                val presenterRegister = callbackConstructorRegisters[1]
+                addInstructions(
+                    registrationIndex + 1,
+                    """
+                        new-instance v$callbackRegister, $INLINE_COMPOSER_MEDIA_RESULT_CALLBACK
+                        invoke-direct {v$callbackRegister, v$presenterRegister}, $INLINE_COMPOSER_MEDIA_RESULT_CALLBACK-><init>($INLINE_COMPOSER_PRESENTER)V
+                        const/16 v$requestCodeRegister, 0x101
+                        invoke-static {v$routerRegister, v$requestCodeRegister, v$callbackRegister}, Lcom/twitter/app/common/i;->a(${ACTIVITY_RESULT_EVENT_ROUTER}I$CONCURRENT_CALLBACK)V
+                    """,
+                )
+            }
+
+            InlineComposerMediaResultCallbackFingerprint.method.apply {
+                val dispatchIndex =
+                    InlineComposerMediaResultCallbackFingerprint.instructionMatches.single().index
+                val dispatchInstruction = getInstruction(dispatchIndex)
+                val dispatchRegisters = dispatchInstruction.registersUsed
+                if (dispatchRegisters.size != 6) {
+                    throw PatchException("Unexpected inline composer media result dispatch")
+                }
+                val requestCodeRegister = dispatchRegisters[1]
+                val intentRegister = dispatchRegisters[3]
+                val originalRequestCodeIndex =
+                    (dispatchIndex - 1 downTo maxOf(0, dispatchIndex - 12)).firstOrNull { index ->
+                        val instruction = getInstruction(index)
+                        instruction is NarrowLiteralInstruction &&
+                            instruction is OneRegisterInstruction &&
+                            instruction.registerA == requestCodeRegister &&
+                            instruction.narrowLiteral == 0x102
+                    } ?: throw PatchException("Could not identify inline composer media result request code")
+                replaceInstruction(
+                    originalRequestCodeIndex,
+                    "const/16 v$requestCodeRegister, 0x101",
+                )
+                addInstructionsWithLabels(
+                    dispatchIndex,
+                    """
+                        if-eqz v$intentRegister, :piko_inline_media_dispatch
+                        const-string v$requestCodeRegister, "editable_media"
+                        invoke-virtual {v$intentRegister, v$requestCodeRegister}, Landroid/content/Intent;->hasExtra(Ljava/lang/String;)Z
+                        move-result v$requestCodeRegister
+                        if-eqz v$requestCodeRegister, :piko_inline_document_result
+                        const/16 v$requestCodeRegister, 0x102
+                        goto :piko_inline_media_dispatch
+                        :piko_inline_document_result
+                        const/16 v$requestCodeRegister, 0x101
+                    """,
+                    ExternalLabel("piko_inline_media_dispatch", getInstruction(dispatchIndex)),
                 )
             }
 
