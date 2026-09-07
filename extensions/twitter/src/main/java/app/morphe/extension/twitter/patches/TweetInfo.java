@@ -49,6 +49,7 @@ public class TweetInfo {
     }
     public static JsonApiTweet checkEntry(JsonApiTweet jsonApiTweet) {
         try {
+            StrictKeywordMute.onTweetParsed(jsonApiTweet);
             Class jsonApiTweetCls = jsonApiTweet.getClass();
             if( commNotesFieldName.length()==0 || promoteBtnFieldName.length()==0 || translateFieldName.length()==0 ){
                 loader(jsonApiTweetCls);

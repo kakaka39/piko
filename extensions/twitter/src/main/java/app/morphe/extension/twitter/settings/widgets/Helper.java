@@ -45,6 +45,12 @@ public class Helper {
         return preference;
     }
 
+    public Preference multilineEditTextPreference(String title, String summary, StringSetting setting) {
+        EditTextPref preference = (EditTextPref) editTextPreference(title, summary, setting);
+        preference.setMultiline();
+        return preference;
+    }
+
     public Preference switchPreference(String title, String summary, BooleanSetting setting) {
         SwitchPref preference = new SwitchPref(context);
         preference.setTitle(title);

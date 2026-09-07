@@ -53,6 +53,7 @@ public class SettingsStatus {
     public static boolean showSourceLabel = false;
     public static boolean hideImmersivePlayer = false;
     public static boolean enableVidAutoAdvance = false;
+    public static boolean strictKeywordMute = false;
 
     public static boolean profileTabCustomisation = false;
     public static boolean timelineTabCustomisation = false;
@@ -216,6 +217,10 @@ public class SettingsStatus {
 
     public static void disableAutoTimelineScroll() {
         disableAutoTimelineScroll = true;
+    }
+
+    public static void strictKeywordMute() {
+        strictKeywordMute = true;
     }
 
     public static void hideLiveThreads() {
@@ -410,7 +415,7 @@ public class SettingsStatus {
 
 
     public static boolean enableTimelineSection() {
-        return ( hidePostMetrics || hideNavbarBadge || showSourceLabel || hideCommBadge || showSensitiveMedia || hideNudgeButton || disableAutoTimelineScroll || forceTranslate || hidePromoteButton || hideCommunityNote || hideLiveThreads || hideBanner || hideInlineBmk || showPollResultsEnabled || hideImmersivePlayer || enableVidAutoAdvance || enableForceHD);
+        return ( strictKeywordMute || hidePostMetrics || hideNavbarBadge || showSourceLabel || hideCommBadge || showSensitiveMedia || hideNudgeButton || disableAutoTimelineScroll || forceTranslate || hidePromoteButton || hideCommunityNote || hideLiveThreads || hideBanner || hideInlineBmk || showPollResultsEnabled || hideImmersivePlayer || enableVidAutoAdvance || enableForceHD);
     }
 
     public static boolean enableMiscSection() {

@@ -944,6 +944,22 @@ public class ScreenBuilder {
         LegacyTwitterPreferenceCategory category = null;
         if(buildCategory)
             category = preferenceCategory(str("piko_title_timeline"));
+        if (SettingsStatus.strictKeywordMute) {
+            addPreference(category,
+                    helper.switchPreference(
+                            str("piko_pref_strict_keyword_mute"),
+                            str("piko_pref_strict_keyword_mute_desc"),
+                            Settings.TIMELINE_STRICT_KEYWORD_MUTE
+                    )
+            );
+            addPreference(category,
+                    helper.multilineEditTextPreference(
+                            str("piko_pref_strict_keyword_mute_keywords"),
+                            str("piko_pref_strict_keyword_mute_keywords_desc"),
+                            Settings.TIMELINE_STRICT_KEYWORD_MUTE_KEYWORDS
+                    )
+            );
+        }
         if (SettingsStatus.disableAutoTimelineScroll) {
             addPreference(category,
                     helper.switchPreference(
