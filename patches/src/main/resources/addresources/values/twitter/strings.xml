@@ -165,6 +165,10 @@
 
     <!-- Timeline Settings -->
     <string name="piko_title_timeline">Timeline</string>
+    <string name="piko_pref_strict_keyword_mute">Strict keyword mute</string>
+    <string name="piko_pref_strict_keyword_mute_desc">Hide posts containing any configured keyword.</string>
+    <string name="piko_pref_strict_keyword_mute_keywords">Muted keywords</string>
+    <string name="piko_pref_strict_keyword_mute_keywords_desc">Enter one keyword per line.</string>
     <string name="piko_pref_disable_auto_timeline_scroll">Disable auto timeline scroll on launch</string>
     <string name="piko_pref_show_post_source">Show post source label</string>
     <string name="piko_pref_show_post_source_desc">There might be a delay while opening a post info and also label will be shown only on public posts</string>

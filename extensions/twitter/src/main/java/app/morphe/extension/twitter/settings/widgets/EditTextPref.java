@@ -42,6 +42,14 @@ public class EditTextPref extends EditTextPreference {
         }
     }
 
+    public void setMultiline() {
+        numericOnly = false;
+        getEditText().setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        getEditText().setSingleLine(false);
+        getEditText().setMinLines(5);
+        getEditText().setMaxLines(12);
+    }
+
     private void init() {
         setSingleLineTitle(false);
         setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
