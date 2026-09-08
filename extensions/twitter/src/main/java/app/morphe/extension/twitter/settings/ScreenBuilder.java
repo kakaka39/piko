@@ -92,6 +92,14 @@ public class ScreenBuilder {
                     ScreenBuilder::buildFontSection
             ),
             new SettingsSection(
+                    "piko_title_strict_keyword_mute",
+                    null,
+                    Settings.STRICT_KEYWORD_MUTE_SECTION,
+                    "ic_vector_speaker_off",
+                    () -> SettingsStatus.strictKeywordMute,
+                    ScreenBuilder::buildStrictKeywordMuteSection
+            ),
+            new SettingsSection(
                     "piko_title_timeline",
                     null,
                     Settings.TIMELINE_SECTION,
@@ -937,6 +945,35 @@ public class ScreenBuilder {
 
     }
 
+    public void buildStrictKeywordMuteSection(boolean buildCategory) {
+        if (!SettingsStatus.strictKeywordMute) return;
+
+        LegacyTwitterPreferenceCategory category = null;
+        if(buildCategory)
+            category = preferenceCategory(str("piko_title_strict_keyword_mute"));
+        addPreference(category,
+                helper.switchPreference(
+                        str("piko_pref_strict_keyword_mute"),
+                        str("piko_pref_strict_keyword_mute_desc"),
+                        Settings.TIMELINE_STRICT_KEYWORD_MUTE
+                )
+        );
+        addPreference(category,
+                helper.switchPreference(
+                        str("piko_pref_strict_keyword_mute_conversations"),
+                        str("piko_pref_strict_keyword_mute_conversations_desc"),
+                        Settings.TIMELINE_STRICT_KEYWORD_MUTE_CONVERSATIONS
+                )
+        );
+        addPreference(category,
+                helper.multilineEditTextPreference(
+                        str("piko_pref_strict_keyword_mute_keywords"),
+                        str("piko_pref_strict_keyword_mute_keywords_desc"),
+                        Settings.TIMELINE_STRICT_KEYWORD_MUTE_KEYWORDS
+                )
+        );
+    }
+
     public void buildTimelineSection(boolean buildCategory){
 
         if (!(SettingsStatus.enableTimelineSection())) return;
@@ -944,22 +981,6 @@ public class ScreenBuilder {
         LegacyTwitterPreferenceCategory category = null;
         if(buildCategory)
             category = preferenceCategory(str("piko_title_timeline"));
-        if (SettingsStatus.strictKeywordMute) {
-            addPreference(category,
-                    helper.switchPreference(
-                            str("piko_pref_strict_keyword_mute"),
-                            str("piko_pref_strict_keyword_mute_desc"),
-                            Settings.TIMELINE_STRICT_KEYWORD_MUTE
-                    )
-            );
-            addPreference(category,
-                    helper.multilineEditTextPreference(
-                            str("piko_pref_strict_keyword_mute_keywords"),
-                            str("piko_pref_strict_keyword_mute_keywords_desc"),
-                            Settings.TIMELINE_STRICT_KEYWORD_MUTE_KEYWORDS
-                    )
-            );
-        }
         if (SettingsStatus.disableAutoTimelineScroll) {
             addPreference(category,
                     helper.switchPreference(
