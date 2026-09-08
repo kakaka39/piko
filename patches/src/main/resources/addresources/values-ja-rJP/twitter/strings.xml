@@ -152,6 +152,13 @@
     <string name="piko_pref_export_flags">機能フラグをエクスポート</string>
     <string name="piko_pref_reset_flags">機能フラグをリセット</string>
     <!-- Timeline Settings -->
+    <string name="piko_title_strict_keyword_mute">キーワードミュート</string>
+    <string name="piko_pref_strict_keyword_mute">厳密なキーワードミュート</string>
+    <string name="piko_pref_strict_keyword_mute_desc">設定したキーワードを含むポストを非表示にします</string>
+    <string name="piko_pref_strict_keyword_mute_conversations">会話全体をミュート</string>
+    <string name="piko_pref_strict_keyword_mute_conversations_desc">ミュートキーワードに一致するポストがある場合、その会話全体を非表示にします</string>
+    <string name="piko_pref_strict_keyword_mute_keywords">ミュートするキーワード</string>
+    <string name="piko_pref_strict_keyword_mute_keywords_desc">1行につき1つのキーワードを入力してください</string>
     <string name="piko_title_timeline">タイムライン</string>
     <string name="piko_pref_disable_auto_timeline_scroll">起動時の自動TLスクロールを無効化</string>
     <string name="piko_pref_show_post_source">ポストのソースラベルを表示</string>

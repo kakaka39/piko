@@ -164,9 +164,12 @@
     <string name="piko_pref_reset_flags">Reset flags</string>
 
     <!-- Timeline Settings -->
+    <string name="piko_title_strict_keyword_mute">Keyword mute</string>
     <string name="piko_title_timeline">Timeline</string>
     <string name="piko_pref_strict_keyword_mute">Strict keyword mute</string>
     <string name="piko_pref_strict_keyword_mute_desc">Hide posts containing any configured keyword.</string>
+    <string name="piko_pref_strict_keyword_mute_conversations">Mute entire conversations</string>
+    <string name="piko_pref_strict_keyword_mute_conversations_desc">Hide the entire conversation when any post in it matches a muted keyword.</string>
     <string name="piko_pref_strict_keyword_mute_keywords">Muted keywords</string>
     <string name="piko_pref_strict_keyword_mute_keywords_desc">Enter one keyword per line.</string>
     <string name="piko_pref_disable_auto_timeline_scroll">Disable auto timeline scroll on launch</string>

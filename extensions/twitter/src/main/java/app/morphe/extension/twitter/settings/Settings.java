@@ -94,6 +94,7 @@ public class Settings {
     public static final BooleanSetting TIMELINE_HIDE_POST_INLINE_METRICS = new BooleanSetting("timeline_hide_post_inline_metrics", false);
     public static final BooleanSetting TIMELINE_HIDE_POST_DETAILED_METRICS = new BooleanSetting("timeline_hide_post_detailed_metrics", false);
     public static final BooleanSetting TIMELINE_STRICT_KEYWORD_MUTE = new BooleanSetting("timeline_strict_keyword_mute", true);
+    public static final BooleanSetting TIMELINE_STRICT_KEYWORD_MUTE_CONVERSATIONS = new BooleanSetting("timeline_strict_keyword_mute_conversations", false);
     public static final StringSetting TIMELINE_STRICT_KEYWORD_MUTE_KEYWORDS = new StringSetting("timeline_strict_keyword_mute_keywords", "");
 
     public static final BooleanSetting PREMIUM_UNDO_POSTS = new BooleanSetting("premium_undo_posts", false);
@@ -148,6 +149,7 @@ public class Settings {
     public static final String MISC_SECTION = "misc_section";
     public static final String CUSTOMISE_SECTION = "custommise_section";
     public static final String FONT_SECTION = "font_section";
+    public static final String STRICT_KEYWORD_MUTE_SECTION = "strict_keyword_mute_section";
     public static final String TIMELINE_SECTION = "timeline_section";
     public static final String LOGGING_SECTION = "logging_section";
     public static final String BACKUP_SECTION = "backup_section";

@@ -31,6 +31,7 @@ import app.morphe.extension.twitter.settings.Settings;
 public final class StrictKeywordMute {
     private static final int MAX_TRAVERSAL_DEPTH = 4;
     private static final int MAX_MUTED_TWEET_IDS = 4096;
+    private static final int MAX_MUTED_CONVERSATION_IDS = 4096;
 
     private static final Map<String, Field> FIELD_CACHE = new ConcurrentHashMap<>();
     private static final Map<String, Method> METHOD_CACHE = new ConcurrentHashMap<>();
@@ -42,8 +43,17 @@ public final class StrictKeywordMute {
                 }
             }
     );
+    private static final Map<Long, Boolean> MUTED_CONVERSATION_IDS = Collections.synchronizedMap(
+            new LinkedHashMap<Long, Boolean>(MAX_MUTED_CONVERSATION_IDS + 1, 0.75f, true) {
+                @Override
+                protected boolean removeEldestEntry(Map.Entry<Long, Boolean> eldest) {
+                    return size() > MAX_MUTED_CONVERSATION_IDS;
+                }
+            }
+    );
 
     private static volatile boolean enabled;
+    private static volatile boolean conversationWideEnabled;
     private static volatile boolean preferencesInitialized;
     private static volatile List<String> keywords = Collections.emptyList();
     private static PikoSharedPrefCategory preferences;
@@ -61,7 +71,8 @@ public final class StrictKeywordMute {
                         @Override
                         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                             if (Settings.TIMELINE_STRICT_KEYWORD_MUTE.key.equals(key)
-                                    || Settings.TIMELINE_STRICT_KEYWORD_MUTE_KEYWORDS.key.equals(key)) {
+                                    || Settings.TIMELINE_STRICT_KEYWORD_MUTE_KEYWORDS.key.equals(key)
+                                    || Settings.TIMELINE_STRICT_KEYWORD_MUTE_CONVERSATIONS.key.equals(key)) {
                                 reloadPreferences();
                             }
                         }
@@ -80,14 +91,21 @@ public final class StrictKeywordMute {
                     Settings.TIMELINE_STRICT_KEYWORD_MUTE.key,
                     Settings.TIMELINE_STRICT_KEYWORD_MUTE.defaultValue
             );
+            conversationWideEnabled = preferences.getBoolean(
+                    Settings.TIMELINE_STRICT_KEYWORD_MUTE_CONVERSATIONS.key,
+                    Settings.TIMELINE_STRICT_KEYWORD_MUTE_CONVERSATIONS.defaultValue
+            );
+            if (!conversationWideEnabled) MUTED_CONVERSATION_IDS.clear();
             setKeywords(preferences.getString(
                     Settings.TIMELINE_STRICT_KEYWORD_MUTE_KEYWORDS.key,
                     Settings.TIMELINE_STRICT_KEYWORD_MUTE_KEYWORDS.defaultValue
             ));
         } catch (Throwable ignored) {
             enabled = false;
+            conversationWideEnabled = false;
             keywords = Collections.emptyList();
             MUTED_TWEET_IDS.clear();
+            MUTED_CONVERSATION_IDS.clear();
         }
     }
 
@@ -95,6 +113,7 @@ public final class StrictKeywordMute {
         if (rawKeywords == null || rawKeywords.isEmpty()) {
             keywords = Collections.emptyList();
             MUTED_TWEET_IDS.clear();
+            MUTED_CONVERSATION_IDS.clear();
             return;
         }
 
@@ -106,12 +125,19 @@ public final class StrictKeywordMute {
         }
         keywords = Collections.unmodifiableList(new ArrayList<>(unique));
         MUTED_TWEET_IDS.clear();
+        MUTED_CONVERSATION_IDS.clear();
     }
 
     /** Called after JsonApiTweet parsing, before the surrounding timeline entry is returned. */
     public static JsonApiTweet onTweetParsed(JsonApiTweet jsonApiTweet) {
         if (!preferencesInitialized) initializePreferences();
         if (!enabled || keywords.isEmpty() || jsonApiTweet == null) return jsonApiTweet;
+        Long conversationId = getConversationId(jsonApiTweet);
+        if (conversationWideEnabled && conversationId != null
+                && MUTED_CONVERSATION_IDS.containsKey(conversationId)) {
+            rememberOuterTweetIds(jsonApiTweet);
+            return jsonApiTweet;
+        }
         try {
             boolean muted = matchesText(jsonApiTweet.V);
             if (!muted) {
@@ -130,13 +156,35 @@ public final class StrictKeywordMute {
                 muted = matchesTweetModel(tweet, new IdentityHashMap<>(), 0);
             }
             if (muted) {
-                rememberTweetId(jsonApiTweet.N);
-                rememberTweetId(jsonApiTweet.U);
+                rememberOuterTweetIds(jsonApiTweet);
+                if (conversationWideEnabled && conversationId != null) {
+                    MUTED_CONVERSATION_IDS.put(conversationId, Boolean.TRUE);
+                }
             }
         } catch (Throwable ignored) {
             // Fail open: a post remains visible if X changes an internal model path.
         }
         return jsonApiTweet;
+    }
+
+    /** Returns only the displayed outer post's conversation ID; quote/repost traversal is intentionally excluded. */
+    private static Long getConversationId(JsonApiTweet jsonApiTweet) {
+        try {
+            Object direct = getField(jsonApiTweet, "b");
+            if (direct instanceof Long && (Long) direct > 0) return (Long) direct;
+
+            Object legacyTweet = getField(jsonApiTweet, "O");
+            Object legacy = getField(legacyTweet, "b");
+            return legacy instanceof Long && (Long) legacy > 0 ? (Long) legacy : null;
+        } catch (Throwable ignored) {
+            // Fail open for conversation-wide muting while preserving keyword matching.
+            return null;
+        }
+    }
+
+    private static void rememberOuterTweetIds(JsonApiTweet jsonApiTweet) {
+        rememberTweetId(jsonApiTweet.N);
+        rememberTweetId(jsonApiTweet.U);
     }
 
     /** Called by the proven-safe timeline JSON entry null-filter hook. */
