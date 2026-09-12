@@ -260,7 +260,7 @@ private object InlineComposerMediaResultCallbackFingerprint : Fingerprint(
 val nativeMediaPickerPatch =
     bytecodePatch(
         name = "Use Android document picker for composer",
-        description = "Opens Android's DocumentsUI when adding images to new posts and replies.",
+        description = "Opens Android's file picker directly, including gallery apps, when adding images to new posts and replies.",
         default = false,
     ) {
         compatibleWith(COMPATIBILITY_X)
@@ -450,23 +450,12 @@ val nativeMediaPickerPatch =
             }
 
             InlineComposerExternalPickerFingerprint.method.apply {
-                val actionIndex =
-                    implementation!!.instructions.withIndex().singleOrNull { (_, instruction) ->
-                        instruction.opcode in setOf(Opcode.CONST_STRING, Opcode.CONST_STRING_JUMBO) &&
-                            instruction.getReference<StringReference>()?.string == "android.intent.action.GET_CONTENT"
-                    }?.index ?: throw PatchException("Could not identify inline composer picker action")
-                val actionRegister = getInstruction<OneRegisterInstruction>(actionIndex).registerA
-                replaceInstruction(
-                    actionIndex,
-                    "const-string v$actionRegister, \"android.intent.action.OPEN_DOCUMENT\"",
-                )
-
+                // Direct GET_CONTENT to DocumentsUI while keeping gallery apps available.
                 val categoryIndex =
                     implementation!!.instructions.withIndex().singleOrNull { (_, instruction) ->
                         instruction.opcode in setOf(Opcode.CONST_STRING, Opcode.CONST_STRING_JUMBO) &&
                             instruction.getReference<StringReference>()?.string == "android.intent.category.OPENABLE"
                     }?.index ?: throw PatchException("Could not identify inline composer picker category")
-                val categoryRegister = getInstruction<OneRegisterInstruction>(categoryIndex).registerA
                 val categoryMoveResult = getInstruction<OneRegisterInstruction>(categoryIndex + 2)
                 if (categoryMoveResult.opcode != Opcode.MOVE_RESULT_OBJECT) {
                     throw PatchException("Unexpected inline composer picker category result")
@@ -475,8 +464,7 @@ val nativeMediaPickerPatch =
                 addInstructions(
                     categoryIndex + 3,
                     """
-                        const/4 v$categoryRegister, 0x1
-                        invoke-virtual {v$intentRegister, v$categoryRegister}, Landroid/content/Intent;->addFlags(I)Landroid/content/Intent;
+                        invoke-static {v$intentRegister}, $NATIVE_MEDIA_PICKER_CONTRACT->prepareIntent(Landroid/content/Intent;)Landroid/content/Intent;
                         move-result-object v$intentRegister
                     """,
                 )
