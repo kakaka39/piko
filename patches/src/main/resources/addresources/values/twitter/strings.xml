@@ -455,4 +455,32 @@ It's recommended to read this before using this feature. It includes some import
 
     <string name="piko_ok">OK</string>
     <string name="piko_cancel">Cancel</string>
+    <string name="piko_mute_manage_summary">Manage keywords and individual mute periods. Refresh the timeline to restore previously hidden posts.</string>
+    <string name="piko_mute_empty">No keywords registered</string>
+    <string name="piko_mute_add">Add keyword</string>
+    <string name="piko_mute_edit">Edit keyword</string>
+    <string name="piko_mute_save">Save</string>
+    <string name="piko_mute_delete">Delete</string>
+    <string name="piko_mute_keyword">Keyword</string>
+    <string name="piko_mute_enabled">Enable this keyword</string>
+    <string name="piko_mute_period">Mute period</string>
+    <string name="piko_mute_always">Always</string>
+    <string name="piko_mute_until">Until date and time</string>
+    <string name="piko_mute_weekly">Every week</string>
+    <string name="piko_mute_date">End date</string>
+    <string name="piko_mute_time">End time</string>
+    <string name="piko_mute_start">Start day and time</string>
+    <string name="piko_mute_end">End day and time</string>
+    <string name="piko_mute_disabled">Disabled</string>
+    <string name="piko_mute_active">Muting now</string>
+    <string name="piko_mute_expired">Expired</string>
+    <string name="piko_mute_outside">Outside scheduled hours</string>
+    <string name="piko_mute_schedule_help">Weekly schedules follow the device time zone and can span midnight or the end of the week. Muting ends at the selected minute.</string>
+    <string name="piko_mute_keyword_error">Enter a non-empty keyword on one line.</string>
+    <string name="piko_mute_past_error">Choose a future end date and time.</string>
+    <string name="piko_mute_week_error">Start and end must be different.</string>
+    <string name="piko_mute_duplicate_error">This keyword is already registered.</string>
+    <string name="piko_mute_data_changed">This rule was removed. Close the editor and try again.</string>
+    <string name="piko_mute_data_error">Mute settings could not be read. Stored data has been preserved. Restore a valid settings backup to recover.</string>
+    <string name="piko_mute_save_error">Could not save the mute settings.</string>
 </resources>

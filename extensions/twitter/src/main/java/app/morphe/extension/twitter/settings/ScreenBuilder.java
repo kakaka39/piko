@@ -966,11 +966,7 @@ public class ScreenBuilder {
                 )
         );
         addPreference(category,
-                helper.multilineEditTextPreference(
-                        str("piko_pref_strict_keyword_mute_keywords"),
-                        str("piko_pref_strict_keyword_mute_keywords_desc"),
-                        Settings.TIMELINE_STRICT_KEYWORD_MUTE_KEYWORDS
-                )
+                new KeywordMutePreference(context)
         );
     }
 

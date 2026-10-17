@@ -7,164 +7,105 @@
 package app.morphe.extension.twitter.patches;
 
 import android.content.SharedPreferences;
-
+import android.os.Handler;
+import android.os.Looper;
 import com.twitter.api.model.json.core.JsonApiTweet;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.text.Normalizer;
-import java.util.ArrayList;
+import java.time.ZoneId;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.IdentityHashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
 import app.morphe.extension.shared.settings.preference.PikoSharedPrefCategory;
+import app.morphe.extension.twitter.patches.keywordmute.KeywordMuteEngine;
+import app.morphe.extension.twitter.patches.keywordmute.KeywordMuteStore;
 import app.morphe.extension.twitter.settings.Settings;
 
 /** Strict substring matching for public posts parsed by X's JsonApiTweet pipeline. */
 public final class StrictKeywordMute {
     private static final int MAX_TRAVERSAL_DEPTH = 4;
-    private static final int MAX_MUTED_TWEET_IDS = 4096;
-    private static final int MAX_MUTED_CONVERSATION_IDS = 4096;
-
     private static final Map<String, Field> FIELD_CACHE = new ConcurrentHashMap<>();
     private static final Map<String, Method> METHOD_CACHE = new ConcurrentHashMap<>();
-    private static final Map<Long, Boolean> MUTED_TWEET_IDS = Collections.synchronizedMap(
-            new LinkedHashMap<Long, Boolean>(MAX_MUTED_TWEET_IDS + 1, 0.75f, true) {
-                @Override
-                protected boolean removeEldestEntry(Map.Entry<Long, Boolean> eldest) {
-                    return size() > MAX_MUTED_TWEET_IDS;
-                }
-            }
-    );
-    private static final Map<Long, Boolean> MUTED_CONVERSATION_IDS = Collections.synchronizedMap(
-            new LinkedHashMap<Long, Boolean>(MAX_MUTED_CONVERSATION_IDS + 1, 0.75f, true) {
-                @Override
-                protected boolean removeEldestEntry(Map.Entry<Long, Boolean> eldest) {
-                    return size() > MAX_MUTED_CONVERSATION_IDS;
-                }
-            }
-    );
-
-    private static volatile boolean enabled;
-    private static volatile boolean conversationWideEnabled;
-    private static volatile boolean preferencesInitialized;
-    private static volatile List<String> keywords = Collections.emptyList();
+    private static final KeywordMuteEngine ENGINE = new KeywordMuteEngine();
+    private static boolean enabled, conversationWideEnabled, preferencesInitialized;
     private static PikoSharedPrefCategory preferences;
     private static SharedPreferences.OnSharedPreferenceChangeListener preferenceListener;
 
-    private StrictKeywordMute() {
-    }
+    private StrictKeywordMute() {}
 
-    private static synchronized void initializePreferences() {
+    private static void initializePreferences() {
         if (preferencesInitialized) return;
         try {
             preferences = new PikoSharedPrefCategory(Settings.SHARED_PREF_NAME);
-            reloadPreferences();
-            preferenceListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-                        @Override
-                        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                            if (Settings.TIMELINE_STRICT_KEYWORD_MUTE.key.equals(key)
-                                    || Settings.TIMELINE_STRICT_KEYWORD_MUTE_KEYWORDS.key.equals(key)
-                                    || Settings.TIMELINE_STRICT_KEYWORD_MUTE_CONVERSATIONS.key.equals(key)) {
-                                reloadPreferences();
-                            }
-                        }
-                    };
+            // Complete migration before observing its own preference notifications.
+            KeywordMuteStore.load(preferences.preferences);
+            preferenceListener = (shared, key) -> {
+                if (key == null || Settings.TIMELINE_STRICT_KEYWORD_MUTE.key.equals(key)
+                        || Settings.TIMELINE_STRICT_KEYWORD_MUTE_RULES.key.equals(key)
+                        || Settings.TIMELINE_STRICT_KEYWORD_MUTE_KEYWORDS.key.equals(key)
+                        || Settings.TIMELINE_STRICT_KEYWORD_MUTE_CONVERSATIONS.key.equals(key)) {
+                    // Never acquire the parsing lock from a synchronous preference write.
+                    new Handler(Looper.getMainLooper()).post(StrictKeywordMute::reloadPreferences);
+                }
+            };
             preferences.preferences.registerOnSharedPreferenceChangeListener(preferenceListener);
             preferencesInitialized = true;
+            reloadPreferences();
         } catch (Throwable ignored) {
             enabled = false;
-            keywords = Collections.emptyList();
+            ENGINE.setRules(Collections.emptyList());
         }
     }
 
-    private static void reloadPreferences() {
+    private static synchronized void reloadPreferences() {
         try {
-            enabled = preferences.getBoolean(
-                    Settings.TIMELINE_STRICT_KEYWORD_MUTE.key,
-                    Settings.TIMELINE_STRICT_KEYWORD_MUTE.defaultValue
-            );
+            enabled = preferences.getBoolean(Settings.TIMELINE_STRICT_KEYWORD_MUTE.key,
+                    Settings.TIMELINE_STRICT_KEYWORD_MUTE.defaultValue);
             conversationWideEnabled = preferences.getBoolean(
-                    Settings.TIMELINE_STRICT_KEYWORD_MUTE_CONVERSATIONS.key,
-                    Settings.TIMELINE_STRICT_KEYWORD_MUTE_CONVERSATIONS.defaultValue
-            );
-            if (!conversationWideEnabled) MUTED_CONVERSATION_IDS.clear();
-            setKeywords(preferences.getString(
-                    Settings.TIMELINE_STRICT_KEYWORD_MUTE_KEYWORDS.key,
-                    Settings.TIMELINE_STRICT_KEYWORD_MUTE_KEYWORDS.defaultValue
-            ));
+                    Settings.TIMELINE_STRICT_KEYWORD_MUTE_CONVERSATIONS.key, false);
+            ENGINE.setRules(KeywordMuteStore.load(preferences.preferences));
         } catch (Throwable ignored) {
+            // Preserve invalid stored data for recovery; never turn it into permanent rules.
             enabled = false;
-            conversationWideEnabled = false;
-            keywords = Collections.emptyList();
-            MUTED_TWEET_IDS.clear();
-            MUTED_CONVERSATION_IDS.clear();
+            ENGINE.setRules(Collections.emptyList());
         }
     }
 
-    private static void setKeywords(String rawKeywords) {
-        if (rawKeywords == null || rawKeywords.isEmpty()) {
-            keywords = Collections.emptyList();
-            MUTED_TWEET_IDS.clear();
-            MUTED_CONVERSATION_IDS.clear();
-            return;
-        }
-
-        String lineNormalized = rawKeywords.replace("\r\n", "\n").replace('\r', '\n');
-        Set<String> unique = new java.util.LinkedHashSet<>();
-        for (String line : lineNormalized.split("\n", -1)) {
-            String keyword = normalize(line);
-            if (!keyword.isEmpty()) unique.add(keyword);
-        }
-        keywords = Collections.unmodifiableList(new ArrayList<>(unique));
-        MUTED_TWEET_IDS.clear();
-        MUTED_CONVERSATION_IDS.clear();
-    }
-
-    /** Called after JsonApiTweet parsing, before the surrounding timeline entry is returned. */
-    public static JsonApiTweet onTweetParsed(JsonApiTweet jsonApiTweet) {
+    /** Called after parsing, before the surrounding timeline entry is returned. */
+    public static synchronized JsonApiTweet onTweetParsed(JsonApiTweet tweet) {
         if (!preferencesInitialized) initializePreferences();
-        if (!enabled || keywords.isEmpty() || jsonApiTweet == null) return jsonApiTweet;
-        Long conversationId = getConversationId(jsonApiTweet);
-        if (conversationWideEnabled && conversationId != null
-                && MUTED_CONVERSATION_IDS.containsKey(conversationId)) {
-            rememberOuterTweetIds(jsonApiTweet);
-            return jsonApiTweet;
-        }
+        if (!enabled || tweet == null) return tweet;
+        long now = System.currentTimeMillis();
+        ENGINE.refresh(now, ZoneId.systemDefault());
+        if (!ENGINE.hasActiveRules()) return tweet;
+        Long conversationId = getConversationId(tweet);
+        Set<String> matches = conversationWideEnabled && conversationId != null
+                ? ENGINE.conversationMatches(conversationId, now) : new HashSet<>();
+        ENGINE.collectMatches(tweet.V, matches);
+        // Collect every matching rule, so expiry of one does not discard other valid reasons.
         try {
-            boolean muted = matchesText(jsonApiTweet.V);
-            if (!muted) {
-                Object legacyTweet = getField(jsonApiTweet, "O");
-                Object legacyText = getField(legacyTweet, "l");
-                muted = legacyText instanceof String && matchesText((String) legacyText);
+            Object text = getField(getField(tweet, "O"), "l");
+            if (text instanceof String) ENGINE.collectMatches((String) text, matches);
+        } catch (Throwable ignored) { }
+        try {
+            collectTweetModel(getField(tweet, "X"), new IdentityHashMap<>(), 0, matches);
+        } catch (Throwable ignored) { }
+        try {
+            Object builder = invokeNoArgsReturning(tweet, "com.twitter.model.core.b$a");
+            collectTweetModel(invokeNoArgs(builder, "k"), new IdentityHashMap<>(), 0, matches);
+        } catch (Throwable ignored) { }
+        if (!matches.isEmpty()) {
+            ENGINE.rememberTweet(tweet.N, matches);
+            ENGINE.rememberTweet(tweet.U, matches);
+            if (conversationWideEnabled && conversationId != null) {
+                ENGINE.rememberConversation(conversationId, matches);
             }
-            if (!muted) {
-                muted = matchesTweetModel(getField(jsonApiTweet, "X"), new IdentityHashMap<>(), 0);
-            }
-            if (!muted) {
-                Object builder = invokeNoArgsReturning(jsonApiTweet, "com.twitter.model.core.b$a");
-                // ApiTweet.Builder extends a generic base class. Its DEX signature returns Object,
-                // even though k() constructs com.twitter.model.core.b, so return-type lookup fails.
-                Object tweet = invokeNoArgs(builder, "k");
-                muted = matchesTweetModel(tweet, new IdentityHashMap<>(), 0);
-            }
-            if (muted) {
-                rememberOuterTweetIds(jsonApiTweet);
-                if (conversationWideEnabled && conversationId != null) {
-                    MUTED_CONVERSATION_IDS.put(conversationId, Boolean.TRUE);
-                }
-            }
-        } catch (Throwable ignored) {
-            // Fail open: a post remains visible if X changes an internal model path.
         }
-        return jsonApiTweet;
+        return tweet;
     }
 
     /** Returns only the displayed outer post's conversation ID; quote/repost traversal is intentionally excluded. */
@@ -182,14 +123,13 @@ public final class StrictKeywordMute {
         }
     }
 
-    private static void rememberOuterTweetIds(JsonApiTweet jsonApiTweet) {
-        rememberTweetId(jsonApiTweet.N);
-        rememberTweetId(jsonApiTweet.U);
-    }
-
-    /** Called by the proven-safe timeline JSON entry null-filter hook. */
-    public static boolean shouldRemoveEntry(String entryId) {
-        if (!enabled || keywords.isEmpty() || entryId == null || MUTED_TWEET_IDS.isEmpty()) return false;
+    /** Re-check time even when no new post was parsed at the schedule boundary. */
+    public static synchronized boolean shouldRemoveEntry(String entryId) {
+        if (!preferencesInitialized) initializePreferences();
+        if (!enabled || entryId == null) return false;
+        long now = System.currentTimeMillis();
+        ENGINE.refresh(now, ZoneId.systemDefault());
+        if (!ENGINE.hasActiveRules()) return false;
         long value = 0;
         boolean readingDigits = false;
         for (int i = 0; i <= entryId.length(); i++) {
@@ -204,7 +144,7 @@ public final class StrictKeywordMute {
                 }
                 value = value * 10 + digit;
             } else if (readingDigits) {
-                if (MUTED_TWEET_IDS.containsKey(value)) return true;
+                if (ENGINE.isTweetMuted(value, now)) return true;
                 readingDigits = false;
                 value = 0;
             }
@@ -212,62 +152,26 @@ public final class StrictKeywordMute {
         return false;
     }
 
-    static String normalize(String value) {
-        if (value == null) return "";
-        String normalized = Normalizer.normalize(value, Normalizer.Form.NFKC)
-                .replace("\r\n", "\n")
-                .replace('\r', '\n')
-                .toLowerCase(Locale.ROOT)
-                .trim();
-        StringBuilder visible = new StringBuilder(normalized.length());
-        for (int offset = 0; offset < normalized.length(); ) {
-            int codePoint = normalized.codePointAt(offset);
-            if (Character.getType(codePoint) != Character.FORMAT) {
-                visible.appendCodePoint(codePoint);
-            }
-            offset += Character.charCount(codePoint);
-        }
-        return visible.toString();
-    }
-
-    static boolean matchesText(String text) {
-        if (text == null || text.isEmpty()) return false;
-        String normalizedText = normalize(text);
-        if (normalizedText.isEmpty()) return false;
-        for (String keyword : keywords) {
-            if (normalizedText.contains(keyword)) return true;
-        }
-        return false;
-    }
-
-    private static boolean matchesTweetModel(Object tweet, IdentityHashMap<Object, Boolean> visited, int depth)
-            throws Exception {
-        if (tweet == null || depth > MAX_TRAVERSAL_DEPTH || visited.put(tweet, Boolean.TRUE) != null) return false;
-        if (!"com.twitter.model.core.b".equals(tweet.getClass().getName())) return false;
-
+    private static void collectTweetModel(Object tweet, IdentityHashMap<Object, Boolean> visited,
+                                          int depth, Set<String> matches) throws Exception {
+        if (tweet == null || depth > MAX_TRAVERSAL_DEPTH || visited.put(tweet, Boolean.TRUE) != null) return;
+        if (!"com.twitter.model.core.b".equals(tweet.getClass().getName())) return;
         Object data = getField(tweet, "f");
         if (data != null) {
-            if (matchesTextObject(getField(data, "k")) || matchesTextObject(getField(data, "l"))) return true;
-            if (matchesNoteTweet(getField(data, "t0"))) return true;
+            collectTextObject(getField(data, "k"), matches);
+            collectTextObject(getField(data, "l"), matches);
+            Object note = getField(data, "t0");
+            Object noteData = invokeNoArgs(getField(note, "c"), "getValue");
+            Object text = getField(noteData, "b");
+            if (text instanceof String) ENGINE.collectMatches((String) text, matches);
         }
-
-        Object quotedResult = getField(tweet, "d");
-        Object quotedTweet = unwrapTweetResult(quotedResult);
-        return matchesTweetModel(quotedTweet, visited, depth + 1);
+        Object quoted = unwrapTweetResult(getField(tweet, "d"));
+        collectTweetModel(quoted, visited, depth + 1, matches);
     }
 
-    private static boolean matchesTextObject(Object textObject) throws Exception {
-        if (textObject == null) return false;
-        Object text = invokeNoArgs(textObject, "getText");
-        return text != null && matchesText(text.toString());
-    }
-
-    private static boolean matchesNoteTweet(Object noteTweet) throws Exception {
-        if (noteTweet == null) return false;
-        Object lazy = getField(noteTweet, "c");
-        Object noteTweetData = invokeNoArgs(lazy, "getValue");
-        Object text = getField(noteTweetData, "b");
-        return text instanceof String && matchesText((String) text);
+    private static void collectTextObject(Object object, Set<String> matches) throws Exception {
+        Object text = invokeNoArgs(object, "getText");
+        if (text != null) ENGINE.collectMatches(text.toString(), matches);
     }
 
     private static Object unwrapTweetResult(Object result) throws Exception {
@@ -279,10 +183,6 @@ public final class StrictKeywordMute {
             return invokeNoArgs(getField(result, "d"), "getValue");
         }
         return null;
-    }
-
-    private static void rememberTweetId(long tweetId) {
-        if (tweetId > 0) MUTED_TWEET_IDS.put(tweetId, Boolean.TRUE);
     }
 
     private static Field findField(Class<?> type, String name) {

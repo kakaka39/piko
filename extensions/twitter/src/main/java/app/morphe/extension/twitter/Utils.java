@@ -31,6 +31,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -40,6 +41,8 @@ import static app.morphe.extension.shared.StringRef.str;
 import app.morphe.extension.crimera.settings.BooleanSetting;
 import app.morphe.extension.crimera.settings.StringSetting;
 import app.morphe.extension.twitter.settings.Settings;
+import app.morphe.extension.twitter.patches.keywordmute.KeywordMuteRule;
+import app.morphe.extension.twitter.patches.keywordmute.KeywordMuteStore;
 import app.morphe.extension.shared.ResourceUtils;
 import app.morphe.extension.shared.settings.preference.PikoSharedPrefCategory;
 
@@ -203,9 +206,13 @@ public class Utils {
         boolean sts = false;
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
+            List<KeywordMuteRule> muteRules =
+                    KeywordMuteStore.rulesForImport(jsonObject);
             Iterator<String> keys = jsonObject.keys();
             while (keys.hasNext()) {
                 String key = keys.next();
+                if (key.equals(Settings.TIMELINE_STRICT_KEYWORD_MUTE_RULES.key)
+                        || key.equals(Settings.TIMELINE_STRICT_KEYWORD_MUTE_KEYWORDS.key)) continue;
                 Object value = jsonObject.get(key);
                 if (value instanceof Boolean) {
                     setBooleanPref(key, (Boolean) value);
@@ -223,6 +230,9 @@ public class Utils {
 
                     setSetPref(key, strings);
                 }
+            }
+            if (muteRules != null) {
+                KeywordMuteStore.save(sp.preferences, muteRules);
             }
             sts = true;
         } catch (Exception ex) {
