@@ -95,6 +95,8 @@ public class Settings {
     public static final BooleanSetting TIMELINE_HIDE_POST_DETAILED_METRICS = new BooleanSetting("timeline_hide_post_detailed_metrics", false);
     public static final BooleanSetting TIMELINE_STRICT_KEYWORD_MUTE = new BooleanSetting("timeline_strict_keyword_mute", true);
     public static final BooleanSetting TIMELINE_STRICT_KEYWORD_MUTE_CONVERSATIONS = new BooleanSetting("timeline_strict_keyword_mute_conversations", false);
+    public static final BooleanSetting ACCOUNT_MUTE = new BooleanSetting("account_mute", true);
+    public static final StringSetting ACCOUNT_MUTE_RULES = new StringSetting("account_mute_rules", "");
     public static final StringSetting TIMELINE_STRICT_KEYWORD_MUTE_RULES = new StringSetting("timeline_strict_keyword_mute_rules", "");
     public static final StringSetting TIMELINE_STRICT_KEYWORD_MUTE_KEYWORDS = new StringSetting("timeline_strict_keyword_mute_keywords", "");
 

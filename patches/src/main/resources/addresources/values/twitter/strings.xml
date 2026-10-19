@@ -483,4 +483,17 @@ It's recommended to read this before using this feature. It includes some import
     <string name="piko_mute_data_changed">This rule was removed. Close the editor and try again.</string>
     <string name="piko_mute_data_error">Mute settings could not be read. Stored data has been preserved. Restore a valid settings backup to recover.</string>
     <string name="piko_mute_save_error">Could not save the mute settings.</string>
+    <string name="piko_title_mute">Mute</string>
+    <string name="piko_account_mute_title">Account mute</string>
+    <string name="piko_account_mute_desc">Hide posts, reposts and quotes involving registered accounts.</string>
+    <string name="piko_account_mute_manage">Muted accounts</string>
+    <string name="piko_account_mute_summary">Register multiple periods per account. Add schedules without replacing existing ones; use newlines, commas or spaces to enter several handles. Update rules after a username change. Refresh the timeline after expiry.</string>
+    <string name="piko_account_mute_empty">No accounts registered</string>
+    <string name="piko_account_mute_add">Add schedules</string>
+    <string name="piko_mute_selected">%s selected</string>
+    <string name="piko_mute_edit_schedules">Edit schedules</string>
+    <string name="piko_mute_all">Select all</string>
+    <string name="piko_account_mute_input">Handles, one per line (for example @account_name)</string>
+    <string name="piko_account_mute_enabled">Enable these accounts</string>
+    <string name="piko_account_mute_invalid">Enter valid handles using 1 to 15 letters, digits or underscores. Invalid entries:</string>
 </resources>

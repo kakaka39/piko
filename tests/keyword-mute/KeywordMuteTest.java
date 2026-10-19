@@ -103,6 +103,34 @@ public final class KeywordMuteTest {
         check(!engine.isTweetMuted(1, end) && engine.isTweetMuted(4097, end), "bounded tweet cache");
         engine.setRules(Collections.emptyList()); engine.refresh(end, TOKYO);
         check(!engine.isTweetMuted(4097, end) && !engine.hasActiveRules(), "setting changes clear cached evidence");
+
+        engine.setRules(Collections.singletonList(until)); engine.refresh(end - 1000, TOKYO);
+        engine.rememberTweetConversation(100, 100);
+        engine.rememberTweetConversation(101, 100);
+        engine.rememberTweetConversation(102, 200);
+        check(!engine.isTweetMuted(100, end - 1000, true), "clean parent visible before later reply matches");
+        engine.rememberTweet(103, matches(engine, "spoiler"));
+        engine.rememberConversation(100, matches(engine, "spoiler"));
+        check(engine.isTweetMuted(100, end - 1000, true), "later reply hides previously parsed root");
+        check(engine.isTweetMuted(101, end - 1000, true), "later reply hides previously parsed sibling");
+        check(!engine.isTweetMuted(102, end - 1000, true), "unrelated conversation stays visible");
+        check(!engine.isTweetMuted(101, end - 1000, false), "conversation switch excludes inherited evidence");
+        check(engine.isTweetMuted(103, end - 1000, false), "conversation switch retains direct keyword match");
+        engine.refresh(end, TOKYO);
+        check(!engine.isTweetMuted(100, end, true), "conversation inheritance ends at expiry");
+
+        engine.setRules(Collections.singletonList(weekend)); engine.refresh(start, TOKYO);
+        engine.rememberTweetConversation(100, 100);
+        engine.rememberConversation(100, matches(engine, "spoiler"));
+        engine.refresh(start + 7 * 86400000L, TOKYO);
+        check(!engine.isTweetMuted(100, start + 7 * 86400000L, true), "no inherited conversation evidence next week");
+        engine.setRules(Collections.singletonList(always)); engine.refresh(end, TOKYO);
+        for (int i = 1; i <= 4097; i++) engine.rememberTweetConversation(i, 9000);
+        engine.rememberConversation(9000, Collections.singleton("always"));
+        check(!engine.isTweetMuted(1, end, true) && engine.isTweetMuted(4097, end, true), "bounded conversation membership cache");
+        engine.setRules(Collections.singletonList(always)); engine.refresh(end, TOKYO);
+        engine.rememberConversation(9000, Collections.singleton("always"));
+        check(!engine.isTweetMuted(4097, end, true), "rule reload clears old conversation memberships");
         System.out.println("PASS: " + checks + " schedule and cache checks");
     }
 }

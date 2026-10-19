@@ -43,9 +43,13 @@ public final class KeywordMuteStore {
     }
 
     public static String encode(List<KeywordMuteRule> rules) throws JSONException {
+        return encode(rules, "keyword");
+    }
+
+    public static String encode(List<KeywordMuteRule> rules, String targetField) throws JSONException {
         JSONArray array = new JSONArray();
         for (KeywordMuteRule rule : rules) {
-            array.put(new JSONObject().put("id", rule.id).put("keyword", rule.keyword)
+            array.put(new JSONObject().put("id", rule.id).put(targetField, rule.keyword)
                     .put("enabled", rule.enabled).put("mode", rule.mode.name()).put("until", rule.until)
                     .put("startDay", rule.startDay).put("startMinute", rule.startMinute)
                     .put("endDay", rule.endDay).put("endMinute", rule.endMinute));
@@ -54,6 +58,14 @@ public final class KeywordMuteStore {
     }
 
     public static List<KeywordMuteRule> decode(String encoded) throws JSONException {
+        return decode(encoded, "keyword");
+    }
+
+    public static List<KeywordMuteRule> decode(String encoded, String targetField) throws JSONException {
+        return decode(encoded, targetField, false);
+    }
+
+    public static List<KeywordMuteRule> decode(String encoded, String targetField, boolean repeatedTargets) throws JSONException {
         JSONObject root = new JSONObject(encoded);
         if (root.getInt("version") != 1) throw new JSONException("Unsupported mute rule version");
         JSONArray array = root.getJSONArray("rules");
@@ -62,11 +74,11 @@ public final class KeywordMuteStore {
         try {
             for (int i = 0; i < array.length(); i++) {
                 JSONObject item = array.getJSONObject(i);
-                KeywordMuteRule rule = new KeywordMuteRule(item.getString("id"), item.getString("keyword"),
+                KeywordMuteRule rule = new KeywordMuteRule(item.getString("id"), item.getString(targetField),
                         item.getBoolean("enabled"), KeywordMuteRule.Mode.valueOf(item.getString("mode")),
                         item.getLong("until"), item.getInt("startDay"), item.getInt("startMinute"),
                         item.getInt("endDay"), item.getInt("endMinute"));
-                if (!ids.add(rule.id) || !keywords.add(rule.normalizedKeyword)) {
+                if (!ids.add(rule.id) || (!repeatedTargets && !keywords.add(rule.normalizedKeyword))) {
                     throw new IllegalArgumentException("Duplicate mute rule");
                 }
                 rules.add(rule);
@@ -83,6 +95,22 @@ public final class KeywordMuteStore {
         decode(encoded); // Validate the entire value before replacing any existing data.
         preferences.edit().putString(Settings.TIMELINE_STRICT_KEYWORD_MUTE_RULES.key, encoded)
                 .remove(Settings.TIMELINE_STRICT_KEYWORD_MUTE_KEYWORDS.key).apply();
+    }
+
+    /** Apply one period to selected rules while preserving keywords, IDs and unrelated rules. */
+    public static List<KeywordMuteRule> withSchedules(List<KeywordMuteRule> current,
+                                                     KeywordMuteRule period, Set<String> editedIds) {
+        if (editedIds.isEmpty()) throw new IllegalArgumentException("No selected keywords");
+        Set<String> remaining = new HashSet<>(editedIds);
+        List<KeywordMuteRule> updated = new ArrayList<>();
+        for (KeywordMuteRule rule : current) {
+            if (!editedIds.contains(rule.id)) { updated.add(rule); continue; }
+            remaining.remove(rule.id);
+            updated.add(new KeywordMuteRule(rule.id, rule.keyword, period.enabled, period.mode, period.until,
+                    period.startDay, period.startMinute, period.endDay, period.endMinute));
+        }
+        if (!remaining.isEmpty()) throw new IllegalArgumentException("Selected keyword no longer exists");
+        return updated;
     }
 
     /** Validate before the general importer writes any settings. New format takes precedence. */

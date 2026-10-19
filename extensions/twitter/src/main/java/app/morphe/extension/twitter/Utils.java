@@ -43,6 +43,7 @@ import app.morphe.extension.crimera.settings.StringSetting;
 import app.morphe.extension.twitter.settings.Settings;
 import app.morphe.extension.twitter.patches.keywordmute.KeywordMuteRule;
 import app.morphe.extension.twitter.patches.keywordmute.KeywordMuteStore;
+import app.morphe.extension.twitter.patches.accountmute.AccountMuteStore;
 import app.morphe.extension.shared.ResourceUtils;
 import app.morphe.extension.shared.settings.preference.PikoSharedPrefCategory;
 
@@ -208,11 +209,13 @@ public class Utils {
             JSONObject jsonObject = new JSONObject(jsonString);
             List<KeywordMuteRule> muteRules =
                     KeywordMuteStore.rulesForImport(jsonObject);
+            List<KeywordMuteRule> accountRules = AccountMuteStore.rulesForImport(jsonObject);
             Iterator<String> keys = jsonObject.keys();
             while (keys.hasNext()) {
                 String key = keys.next();
                 if (key.equals(Settings.TIMELINE_STRICT_KEYWORD_MUTE_RULES.key)
-                        || key.equals(Settings.TIMELINE_STRICT_KEYWORD_MUTE_KEYWORDS.key)) continue;
+                        || key.equals(Settings.TIMELINE_STRICT_KEYWORD_MUTE_KEYWORDS.key)
+                        || key.equals(Settings.ACCOUNT_MUTE_RULES.key)) continue;
                 Object value = jsonObject.get(key);
                 if (value instanceof Boolean) {
                     setBooleanPref(key, (Boolean) value);
@@ -234,6 +237,7 @@ public class Utils {
             if (muteRules != null) {
                 KeywordMuteStore.save(sp.preferences, muteRules);
             }
+            if (accountRules != null) AccountMuteStore.save(sp.preferences, accountRules);
             sts = true;
         } catch (Exception ex) {
             toast(ex.toString());

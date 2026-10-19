@@ -23,6 +23,11 @@ public final class KeywordMuteEngine {
     private final Map<String, Long> ends = new HashMap<>();
     private final Map<Long, Map<String, Long>> tweets = boundedCache();
     private final Map<Long, Map<String, Long>> conversations = boundedCache();
+    private final Map<Long, Long> tweetConversations = new LinkedHashMap<Long, Long>(64, .75f, true) {
+        @Override protected boolean removeEldestEntry(Map.Entry<Long, Long> entry) {
+            return size() > 4096;
+        }
+    };
     private long minute = Long.MIN_VALUE;
     private ZoneId zone;
 
@@ -43,6 +48,7 @@ public final class KeywordMuteEngine {
     public void clearEvidence() {
         tweets.clear();
         conversations.clear();
+        tweetConversations.clear();
     }
 
     public void refresh(long now, ZoneId currentZone) {
@@ -64,12 +70,21 @@ public final class KeywordMuteEngine {
     }
 
     public boolean hasActiveRules() { return !active.isEmpty(); }
+    public boolean hasRules() { return !rules.isEmpty(); }
 
     public void collectMatches(String text, Set<String> matches) {
         String normalized = KeywordMuteRule.normalize(text);
         if (normalized.isEmpty()) return;
         for (KeywordMuteRule rule : active.values()) {
             if (normalized.contains(rule.normalizedKeyword)) matches.add(rule.id);
+        }
+    }
+
+    /** Exact identifier matching for account rules; never substring-match an account. */
+    public void collectExactMatches(String identifier, Set<String> matches) {
+        if (identifier == null) return;
+        for (KeywordMuteRule rule : active.values()) {
+            if (rule.normalizedKeyword.equals(identifier)) matches.add(rule.id);
         }
     }
 
@@ -96,6 +111,15 @@ public final class KeywordMuteEngine {
 
     public Set<String> conversationMatches(long id, long now) { return evidence(conversations, id, now); }
     public boolean isTweetMuted(long id, long now) { return !evidence(tweets, id, now).isEmpty(); }
+    public boolean isTweetMuted(long id, long now, boolean includeConversation) {
+        if (isTweetMuted(id, now)) return true;
+        Long conversation = includeConversation ? tweetConversations.get(id) : null;
+        return conversation != null && !conversationMatches(conversation, now).isEmpty();
+    }
+    /** Record clean posts too: a later reply may provide the first matching evidence. */
+    public void rememberTweetConversation(long tweetId, long conversationId) {
+        if (tweetId > 0 && conversationId > 0) tweetConversations.put(tweetId, conversationId);
+    }
     public void rememberTweet(long id, Set<String> matches) { remember(tweets, id, matches); }
     public void rememberConversation(long id, Set<String> matches) { remember(conversations, id, matches); }
 }

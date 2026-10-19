@@ -53,6 +53,8 @@ public class SettingsStatus {
     public static boolean showSourceLabel = false;
     public static boolean hideImmersivePlayer = false;
     public static boolean enableVidAutoAdvance = false;
+    public static boolean accountMute = false;
+    public static void accountMute() { accountMute = true; }
     public static boolean strictKeywordMute = false;
 
     public static boolean profileTabCustomisation = false;

@@ -74,6 +74,29 @@ public final class KeywordMuteStoreTest {
         JSONObject invalidMode = new JSONObject(KeywordMuteStore.encode(all));
         invalidMode.getJSONArray("rules").getJSONObject(0).put("mode", "UNKNOWN");
         invalid(() -> KeywordMuteStore.rulesForImport(new JSONObject().put(RULES, invalidMode.toString())), "unknown modes never become permanent");
+        Set<String> selectedIds = new HashSet<>(Arrays.asList(all.get(0).id, all.get(1).id));
+        List<KeywordMuteRule> bulk = KeywordMuteStore.withSchedules(all, all.get(1), selectedIds);
+        check(bulk.get(0).id.equals(all.get(0).id) && bulk.get(0).keyword.equals(all.get(0).keyword)
+                && bulk.get(1).id.equals(all.get(1).id), "bulk period update preserves exact keywords and IDs");
+        check(bulk.get(0).until == expiry && bulk.get(0).mode == KeywordMuteRule.Mode.UNTIL
+                && !bulk.get(0).enabled && !bulk.get(1).enabled, "bulk period and enabled state applied to every selection");
+        check(bulk.get(2) == all.get(2) && all.get(0).mode == KeywordMuteRule.Mode.ALWAYS,
+                "unselected rules and source list remain untouched");
+        MemoryPreferences bulkPrefs = new MemoryPreferences();
+        KeywordMuteStore.save(bulkPrefs, bulk);
+        check(KeywordMuteStore.load(bulkPrefs).get(0).until == expiry, "bulk update roundtrip");
+        int writes = bulkPrefs.writes;
+        try {
+            KeywordMuteStore.save(bulkPrefs, KeywordMuteStore.withSchedules(all, all.get(1),
+                    new HashSet<>(Arrays.asList(all.get(0).id, "missing"))));
+            throw new AssertionError("stale selection must fail");
+        } catch (IllegalArgumentException expected) {
+            check(bulkPrefs.writes == writes, "stale bulk selection never partially saves");
+        }
+        try {
+            KeywordMuteStore.withSchedules(all, all.get(1), Collections.emptySet());
+            throw new AssertionError("empty selection must fail");
+        } catch (IllegalArgumentException expected) { check(true, "empty bulk selection rejected"); }
         System.out.println("PASS: " + checks + " migration, storage and backup checks");
     }
 }

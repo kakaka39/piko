@@ -92,11 +92,11 @@ public class ScreenBuilder {
                     ScreenBuilder::buildFontSection
             ),
             new SettingsSection(
-                    "piko_title_strict_keyword_mute",
+                    "piko_title_mute",
                     null,
                     Settings.STRICT_KEYWORD_MUTE_SECTION,
                     "ic_vector_speaker_off",
-                    () -> SettingsStatus.strictKeywordMute,
+                    () -> SettingsStatus.strictKeywordMute || SettingsStatus.accountMute,
                     ScreenBuilder::buildStrictKeywordMuteSection
             ),
             new SettingsSection(
@@ -946,28 +946,21 @@ public class ScreenBuilder {
     }
 
     public void buildStrictKeywordMuteSection(boolean buildCategory) {
-        if (!SettingsStatus.strictKeywordMute) return;
-
-        LegacyTwitterPreferenceCategory category = null;
-        if(buildCategory)
-            category = preferenceCategory(str("piko_title_strict_keyword_mute"));
-        addPreference(category,
-                helper.switchPreference(
-                        str("piko_pref_strict_keyword_mute"),
-                        str("piko_pref_strict_keyword_mute_desc"),
-                        Settings.TIMELINE_STRICT_KEYWORD_MUTE
-                )
-        );
-        addPreference(category,
-                helper.switchPreference(
-                        str("piko_pref_strict_keyword_mute_conversations"),
-                        str("piko_pref_strict_keyword_mute_conversations_desc"),
-                        Settings.TIMELINE_STRICT_KEYWORD_MUTE_CONVERSATIONS
-                )
-        );
-        addPreference(category,
-                new KeywordMutePreference(context)
-        );
+        if (!SettingsStatus.strictKeywordMute && !SettingsStatus.accountMute) return;
+        if (SettingsStatus.strictKeywordMute) {
+            LegacyTwitterPreferenceCategory category = preferenceCategory(str("piko_title_strict_keyword_mute"));
+            addPreference(category, helper.switchPreference(str("piko_pref_strict_keyword_mute"),
+                    str("piko_pref_strict_keyword_mute_desc"), Settings.TIMELINE_STRICT_KEYWORD_MUTE));
+            addPreference(category, helper.switchPreference(str("piko_pref_strict_keyword_mute_conversations"),
+                    str("piko_pref_strict_keyword_mute_conversations_desc"), Settings.TIMELINE_STRICT_KEYWORD_MUTE_CONVERSATIONS));
+            addPreference(category, new KeywordMutePreference(context));
+        }
+        if (SettingsStatus.accountMute) {
+            LegacyTwitterPreferenceCategory category = preferenceCategory(str("piko_account_mute_title"));
+            addPreference(category, helper.switchPreference(str("piko_account_mute_title"),
+                    str("piko_account_mute_desc"), Settings.ACCOUNT_MUTE));
+            addPreference(category, new KeywordMutePreference(context, true));
+        }
     }
 
     public void buildTimelineSection(boolean buildCategory){

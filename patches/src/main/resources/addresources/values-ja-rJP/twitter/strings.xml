@@ -451,4 +451,17 @@ https://github.com/crimera/piko/blob/dev/docs/about_login_token_patch.md
     <string name="piko_mute_data_changed">この設定は削除されています。編集画面を閉じてやり直してください。</string>
     <string name="piko_mute_data_error">ミュート設定を読み込めませんでした。保存データは保持しています。有効な設定バックアップを復元してください。</string>
     <string name="piko_mute_save_error">ミュート設定を保存できませんでした。</string>
+    <string name="piko_title_mute">ミュート</string>
+    <string name="piko_account_mute_title">アカウントミュート</string>
+    <string name="piko_account_mute_desc">登録したアカウントの投稿・リポスト・引用投稿を非表示にします。</string>
+    <string name="piko_account_mute_manage">ミュートするアカウント</string>
+    <string name="piko_account_mute_summary">同じアカウントに複数の期間を登録できます。追加時は既存の設定を保持します。改行・カンマ・空白で複数を一括入力できます。ユーザー名変更時は設定を更新してください。期限後はタイムラインを更新してください。</string>
+    <string name="piko_account_mute_empty">アカウントは登録されていません</string>
+    <string name="piko_account_mute_add">スケジュールを追加</string>
+    <string name="piko_mute_selected">%s件選択中</string>
+    <string name="piko_mute_edit_schedules">スケジュールを編集</string>
+    <string name="piko_mute_all">すべて選択</string>
+    <string name="piko_account_mute_input">ユーザー名を1行に1件入力（例：@account_name）</string>
+    <string name="piko_account_mute_enabled">対象アカウントを有効にする</string>
+    <string name="piko_account_mute_invalid">ユーザー名は半角英数字・アンダースコアの1～15文字で入力してください。不正な入力：</string>
 </resources>

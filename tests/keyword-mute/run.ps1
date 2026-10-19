@@ -3,7 +3,7 @@ $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..\..'))
 $sourceRoot = Join-Path $repoRoot 'extensions\twitter\src\main\java\app\morphe\extension\twitter\patches\keywordmute'
 $outputRoot = Join-Path $repoRoot 'build\keyword-mute-tests'
 New-Item -ItemType Directory -Force -Path $outputRoot | Out-Null
-& javac -encoding UTF-8 -d $outputRoot (Join-Path $sourceRoot 'KeywordMuteRule.java') (Join-Path $sourceRoot 'KeywordMuteEngine.java') (Join-Path $PSScriptRoot 'KeywordMuteTest.java')
+& javac -encoding UTF-8 -d $outputRoot (Join-Path $sourceRoot 'MuteSchedule.java') (Join-Path $sourceRoot 'KeywordMuteRule.java') (Join-Path $sourceRoot 'KeywordMuteEngine.java') (Join-Path $PSScriptRoot 'KeywordMuteTest.java')
 if ($LASTEXITCODE -ne 0) { throw 'Test compilation failed.' }
 & java -cp $outputRoot KeywordMuteTest
 if ($LASTEXITCODE -ne 0) { throw 'Keyword mute regression tests failed.' }

@@ -42,18 +42,27 @@ import app.morphe.extension.shared.settings.preference.PikoSharedPrefCategory;
 import app.morphe.extension.twitter.patches.keywordmute.KeywordMuteRule;
 import app.morphe.extension.twitter.patches.keywordmute.KeywordMuteStore;
 import app.morphe.extension.twitter.settings.Settings;
+import app.morphe.extension.twitter.patches.accountmute.AccountMuteStore;
+import app.morphe.extension.twitter.patches.accountmute.AccountTargets;
 
 /** Rule list and editor, using platform date/time pickers at minute precision. */
 @SuppressWarnings("deprecation")
 public final class KeywordMutePreference extends Preference {
     private static final DateTimeFormatter DATE_TIME = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm XXX");
 
-    public KeywordMutePreference(Context context) {
+    private final boolean accounts;
+    private final String titleKey;
+
+    public KeywordMutePreference(Context context) { this(context, false); }
+
+    public KeywordMutePreference(Context context, boolean accounts) {
         super(context);
-        setKey(Settings.TIMELINE_STRICT_KEYWORD_MUTE_RULES.key);
+        this.accounts = accounts;
+        this.titleKey = accounts ? "piko_account_mute_manage" : "piko_pref_strict_keyword_mute_keywords";
+        setKey(accounts ? Settings.ACCOUNT_MUTE_RULES.key : Settings.TIMELINE_STRICT_KEYWORD_MUTE_RULES.key);
         setPersistent(false);
-        setTitle(str("piko_pref_strict_keyword_mute_keywords"));
-        setSummary(str("piko_mute_manage_summary"));
+        setTitle(str(titleKey));
+        setSummary(str(accounts ? "piko_account_mute_summary" : "piko_mute_manage_summary"));
         setSingleLineTitle(false);
         setOnPreferenceClickListener(ignored -> { new Manager().show(); return true; });
     }
@@ -61,6 +70,7 @@ public final class KeywordMutePreference extends Preference {
     private final class Manager {
         private final PikoSharedPrefCategory preferences = new PikoSharedPrefCategory(Settings.SHARED_PREF_NAME);
         private final List<KeywordMuteRule> rules = new ArrayList<>();
+        private final List<List<KeywordMuteRule>> rows = new ArrayList<>();
         private final ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1);
         private final Handler handler = new Handler(Looper.getMainLooper());
         private AlertDialog listDialog;
@@ -73,13 +83,24 @@ public final class KeywordMutePreference extends Preference {
             }
         };
 
+        private List<KeywordMuteRule> loadRules() throws org.json.JSONException {
+            return accounts ? AccountMuteStore.load(preferences.preferences) : KeywordMuteStore.load(preferences.preferences);
+        }
+        private void saveRules(List<KeywordMuteRule> rules) throws org.json.JSONException {
+            if (accounts) AccountMuteStore.save(preferences.preferences, rules);
+            else KeywordMuteStore.save(preferences.preferences, rules);
+        }
+
         private boolean reload() {
             try {
                 rules.clear();
-                rules.addAll(KeywordMuteStore.load(preferences.preferences));
+                rules.addAll(loadRules());
+                rows.clear();
+                if (accounts) rows.addAll(AccountMuteStore.groups(rules));
+                else for (KeywordMuteRule rule : rules) rows.add(java.util.Collections.singletonList(rule));
                 adapter.clear();
-                for (KeywordMuteRule rule : rules) adapter.add(summary(rule));
-                if (rules.isEmpty()) adapter.add(str("piko_mute_empty"));
+                for (List<KeywordMuteRule> row : rows) adapter.add(summary(row));
+                if (rules.isEmpty()) adapter.add(str(accounts ? "piko_account_mute_empty" : "piko_mute_empty"));
                 return true;
             } catch (Exception e) {
                 handler.removeCallbacks(tick);
@@ -93,9 +114,9 @@ public final class KeywordMutePreference extends Preference {
         void show() {
             if (!reload()) return;
             listDialog = new AlertDialog.Builder(getContext())
-                    .setTitle(str("piko_pref_strict_keyword_mute_keywords"))
+                    .setTitle(str(titleKey))
                     .setAdapter(adapter, (dialog, index) -> { })
-                    .setPositiveButton(str("piko_mute_add"), null)
+                    .setPositiveButton(str(accounts ? "piko_account_mute_add" : "piko_mute_add"), null)
                     .setNegativeButton(android.R.string.cancel, null).create();
             listDialog.setOnDismissListener(ignored -> handler.removeCallbacks(tick));
             listDialog.show();
@@ -105,16 +126,23 @@ public final class KeywordMutePreference extends Preference {
             });
             // Override the default list listener so the list remains behind the editor.
             listDialog.getListView().setOnItemClickListener((parent, view, index, id) -> {
-                if (index < rules.size()) edit(rules.get(index));
+                if (index < rows.size()) {
+                    List<KeywordMuteRule> row = rows.get(index);
+                    edit(row.get(0), accounts ? row : null);
+                }
             });
             listDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view -> edit(null));
+            listDialog.getListView().setOnItemLongClickListener((parent, view, index, id) -> {
+                if (index >= rows.size()) return false;
+                selectRules(rows.get(index).get(0).id);
+                return true;
+            });
             tick.run();
         }
 
         private String summary(KeywordMuteRule rule) {
             long now = System.currentTimeMillis();
-            boolean globallyEnabled = preferences.preferences.getBoolean(Settings.TIMELINE_STRICT_KEYWORD_MUTE.key,
-                    Settings.TIMELINE_STRICT_KEYWORD_MUTE.defaultValue);
+            boolean globallyEnabled = preferences.preferences.getBoolean(accounts ? Settings.ACCOUNT_MUTE.key : Settings.TIMELINE_STRICT_KEYWORD_MUTE.key, true);
             String status = !rule.enabled || !globallyEnabled ? str("piko_mute_disabled")
                     : rule.activeUntil(now, ZoneId.systemDefault()) > now ? str("piko_mute_active")
                     : rule.mode == KeywordMuteRule.Mode.UNTIL ? str("piko_mute_expired")
@@ -124,11 +152,96 @@ public final class KeywordMutePreference extends Preference {
                     ? str("piko_mute_until") + " " + DATE_TIME.format(Instant.ofEpochMilli(rule.until).atZone(ZoneId.systemDefault()))
                     : str("piko_mute_weekly") + " " + day(rule.startDay) + " " + time(rule.startMinute)
                     + " → " + day(rule.endDay) + " " + time(rule.endMinute);
-            return rule.keyword + "\n" + status + " · " + period;
+            return (accounts ? "@" : "") + rule.keyword + "\n" + status + " · " + period;
         }
 
-        private void edit(KeywordMuteRule original) {
+        private void edit(KeywordMuteRule original) { edit(original, null); }
+
+        private String summary(List<KeywordMuteRule> group) {
+            if (!accounts) return summary(group.get(0));
+            List<String> handles = new ArrayList<>();
+            for (KeywordMuteRule rule : group) handles.add("@" + rule.keyword);
+            String first = summary(group.get(0));
+            return String.join("\n", handles) + first.substring(first.indexOf('\n'));
+        }
+
+        private void selectRules(String initialId) {
+            if (!reload() || rules.isEmpty()) return;
+            List<List<KeywordMuteRule>> snapshot = new ArrayList<>(rows);
+            String[] labels = new String[snapshot.size()];
+            boolean[] selected = new boolean[labels.length];
+            for (int i = 0; i < labels.length; i++) {
+                labels[i] = summary(snapshot.get(i));
+                selected[i] = snapshot.get(i).stream().anyMatch(rule -> rule.id.equals(initialId));
+            }
+            LinearLayout footer = new LinearLayout(getContext());
+            footer.setOrientation(LinearLayout.VERTICAL);
+            int padding = (int) (20 * getContext().getResources().getDisplayMetrics().density);
+            footer.setPadding(padding, 0, padding, 0);
+            LinearLayout actions = section(footer);
+            actions.setOrientation(LinearLayout.HORIZONTAL);
+            Button all = button(actions, str("piko_mute_all"));
+            Button delete = button(actions, str("piko_mute_delete"));
+            all.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+            delete.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+            TextView error = label(footer, "");
+            error.setVisibility(View.GONE);
+            AlertDialog picker = new AlertDialog.Builder(getContext())
+                    .setTitle(str("piko_mute_selected", "0"))
+                    .setMultiChoiceItems(labels, selected, (dialog, index, checked) -> {
+                        selected[index] = checked;
+                        updateSelection((AlertDialog) dialog, selected, delete);
+                    })
+                    .setView(footer)
+                    .setPositiveButton(str("piko_mute_edit_schedules"), null)
+                    .setNegativeButton(android.R.string.cancel, null).create();
+            picker.show();
+            updateSelection(picker, selected, delete);
+            all.setOnClickListener(view -> {
+                for (int i = 0; i < selected.length; i++) { selected[i] = true; picker.getListView().setItemChecked(i, true); }
+                updateSelection(picker, selected, delete);
+            });
+            picker.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view -> {
+                List<KeywordMuteRule> schedules = new ArrayList<>();
+                int count = 0;
+                for (int i = 0; i < selected.length; i++) if (selected[i]) {
+                    schedules.addAll(snapshot.get(i));
+                    count++;
+                }
+                if (schedules.isEmpty()) return;
+                picker.dismiss(); edit(count == 1 ? schedules.get(0) : null, schedules);
+            });
+            delete.setOnClickListener(view -> {
+                java.util.Set<String> selectedIds = new java.util.HashSet<>();
+                for (int i = 0; i < selected.length; i++) if (selected[i]) {
+                    for (KeywordMuteRule rule : snapshot.get(i)) selectedIds.add(rule.id);
+                }
+                if (selectedIds.isEmpty()) return;
+                try {
+                    // Read current storage so unselected schedules and later additions survive.
+                    List<KeywordMuteRule> updated = new ArrayList<>(loadRules());
+                    updated.removeIf(rule -> selectedIds.contains(rule.id));
+                    saveRules(updated);
+                    picker.dismiss();
+                    reload();
+                } catch (Exception e) {
+                    error.setText(str("piko_mute_save_error"));
+                    error.setVisibility(View.VISIBLE);
+                }
+            });
+        }
+
+        private void updateSelection(AlertDialog picker, boolean[] selected, Button delete) {
+            int count = 0;
+            for (boolean checked : selected) if (checked) count++;
+            picker.setTitle(str("piko_mute_selected", String.valueOf(count)));
+            picker.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(count > 0);
+            delete.setEnabled(count > 0);
+        }
+
+        private void edit(KeywordMuteRule original, List<KeywordMuteRule> batch) {
             Context context = getContext();
+            boolean bulkPeriod = batch != null && original == null;
             ZoneId zone = ZoneId.systemDefault();
             LinearLayout form = new LinearLayout(context);
             form.setOrientation(LinearLayout.VERTICAL);
@@ -137,13 +250,19 @@ public final class KeywordMutePreference extends Preference {
             TextView help = label(form, str("piko_mute_schedule_help") + "\n" + zone.getId());
             help.setTextIsSelectable(true);
             EditText keyword = new EditText(context);
-            keyword.setHint(str("piko_mute_keyword"));
-            keyword.setInputType(InputType.TYPE_CLASS_TEXT);
-            keyword.setSingleLine(true);
-            keyword.setText(original == null ? "" : original.keyword);
+            keyword.setHint(str(accounts ? "piko_account_mute_input" : "piko_mute_keyword"));
+            keyword.setInputType(InputType.TYPE_CLASS_TEXT | (accounts || bulkPeriod ? InputType.TYPE_TEXT_FLAG_MULTI_LINE : 0));
+            keyword.setSingleLine(!accounts && !bulkPeriod);
+            if (accounts || bulkPeriod) { keyword.setMinLines(3); keyword.setMaxLines(8); }
+            java.util.Set<String> editedIds = new java.util.HashSet<>();
+            java.util.Set<String> batchHandles = new java.util.LinkedHashSet<>();
+            if (original != null) editedIds.add(original.id);
+            if (batch != null) for (KeywordMuteRule rule : batch) { editedIds.add(rule.id); batchHandles.add(rule.keyword); }
+            keyword.setText(batch != null ? String.join("\n", batchHandles) : original == null ? "" : original.keyword);
+            if (bulkPeriod) keyword.setEnabled(false);
             form.addView(keyword);
             Switch enabled = new Switch(context);
-            enabled.setText(str("piko_mute_enabled"));
+            enabled.setText(str(accounts ? "piko_account_mute_enabled" : "piko_mute_enabled"));
             enabled.setChecked(original == null || original.enabled);
             form.addView(enabled);
             label(form, str("piko_mute_period"));
@@ -205,7 +324,8 @@ public final class KeywordMutePreference extends Preference {
             scroll.setFillViewport(true);
             scroll.addView(form);
             AlertDialog editor = new AlertDialog.Builder(context)
-                    .setTitle(str(original == null ? "piko_mute_add" : "piko_mute_edit"))
+                    .setTitle(str(accounts ? "piko_account_mute_manage" : bulkPeriod ? "piko_mute_edit_schedules"
+                            : original == null ? "piko_mute_add" : "piko_mute_edit"))
                     .setView(scroll).setPositiveButton(str("piko_mute_save"), null)
                     .setNegativeButton(android.R.string.cancel, null)
                     .setNeutralButton(original == null ? null : str("piko_mute_delete"), null).create();
@@ -213,7 +333,7 @@ public final class KeywordMutePreference extends Preference {
             editor.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view -> {
                 String entered = keyword.getText().toString();
                 String normalized = KeywordMuteRule.normalize(entered);
-                if (normalized.isEmpty() || entered.contains("\n") || entered.contains("\r")) {
+                if (!accounts && !bulkPeriod && (normalized.isEmpty() || entered.contains("\n") || entered.contains("\r"))) {
                     error.setText(str("piko_mute_keyword_error")); return;
                 }
                 KeywordMuteRule.Mode selected = KeywordMuteRule.Mode.values()[mode.getSelectedItemPosition()];
@@ -225,9 +345,31 @@ public final class KeywordMutePreference extends Preference {
                         && startMinute[0] == endMinute[0]) {
                     error.setText(str("piko_mute_week_error")); return;
                 }
+                if (accounts) {
+                    AccountTargets.Batch parsed = AccountTargets.parse(entered);
+                    if (parsed.handles.isEmpty() || !parsed.invalid.isEmpty()) {
+                        error.setText(str("piko_account_mute_invalid") + "\n" + String.join("\n", parsed.invalid)); return;
+                    }
+                    KeywordMuteRule period = new KeywordMuteRule("period", parsed.handles.get(0), enabled.isChecked(),
+                            selected, until[0], startDay.getSelectedItemPosition() + 1, startMinute[0],
+                            endDay.getSelectedItemPosition() + 1, endMinute[0]);
+                    try {
+                        saveRules(AccountMuteStore.withSchedules(loadRules(), parsed.handles, period, editedIds));
+                        editor.dismiss(); reload();
+                    } catch (IllegalArgumentException e) { error.setText(str("piko_mute_data_changed")); }
+                    catch (Exception e) { error.setText(str("piko_mute_save_error")); }
+                    return;
+                }
                 try {
                     // Retain other rules that changed outside this editor.
-                    List<KeywordMuteRule> updated = new ArrayList<>(KeywordMuteStore.load(preferences.preferences));
+                    List<KeywordMuteRule> updated = new ArrayList<>(loadRules());
+                    if (bulkPeriod) {
+                        KeywordMuteRule period = new KeywordMuteRule("period", "period", enabled.isChecked(), selected,
+                                until[0], startDay.getSelectedItemPosition() + 1, startMinute[0],
+                                endDay.getSelectedItemPosition() + 1, endMinute[0]);
+                        saveRules(KeywordMuteStore.withSchedules(updated, period, editedIds));
+                        editor.dismiss(); reload(); return;
+                    }
                     int index = -1;
                     for (int i = 0; i < updated.size(); i++) {
                         KeywordMuteRule other = updated.get(i);
@@ -241,16 +383,17 @@ public final class KeywordMutePreference extends Preference {
                             keyword.getText().toString(), enabled.isChecked(), selected, until[0],
                             startDay.getSelectedItemPosition() + 1, startMinute[0], endDay.getSelectedItemPosition() + 1, endMinute[0]);
                     if (index < 0) updated.add(rule); else updated.set(index, rule);
-                    KeywordMuteStore.save(preferences.preferences, updated);
+                    saveRules(updated);
                     editor.dismiss();
                     reload();
-                } catch (Exception e) { error.setText(str("piko_mute_save_error")); }
+                } catch (IllegalArgumentException e) { error.setText(str("piko_mute_data_changed")); }
+                catch (Exception e) { error.setText(str("piko_mute_save_error")); }
             });
             if (original != null) editor.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(view -> {
                 try {
-                    List<KeywordMuteRule> updated = new ArrayList<>(KeywordMuteStore.load(preferences.preferences));
-                    updated.removeIf(rule -> rule.id.equals(original.id));
-                    KeywordMuteStore.save(preferences.preferences, updated);
+                    List<KeywordMuteRule> updated = new ArrayList<>(loadRules());
+                    updated.removeIf(rule -> editedIds.contains(rule.id));
+                    saveRules(updated);
                     editor.dismiss();
                     reload();
                 } catch (Exception e) { error.setText(str("piko_mute_save_error")); }

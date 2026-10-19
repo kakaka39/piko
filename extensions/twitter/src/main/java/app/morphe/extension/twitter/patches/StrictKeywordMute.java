@@ -24,6 +24,7 @@ import app.morphe.extension.shared.settings.preference.PikoSharedPrefCategory;
 import app.morphe.extension.twitter.patches.keywordmute.KeywordMuteEngine;
 import app.morphe.extension.twitter.patches.keywordmute.KeywordMuteStore;
 import app.morphe.extension.twitter.settings.Settings;
+import app.morphe.extension.twitter.settings.SettingsStatus;
 
 /** Strict substring matching for public posts parsed by X's JsonApiTweet pipeline. */
 public final class StrictKeywordMute {
@@ -77,14 +78,19 @@ public final class StrictKeywordMute {
 
     /** Called after parsing, before the surrounding timeline entry is returned. */
     public static synchronized JsonApiTweet onTweetParsed(JsonApiTweet tweet) {
+        if (!SettingsStatus.strictKeywordMute) return tweet;
         if (!preferencesInitialized) initializePreferences();
         if (!enabled || tweet == null) return tweet;
         long now = System.currentTimeMillis();
         ENGINE.refresh(now, ZoneId.systemDefault());
         if (!ENGINE.hasActiveRules()) return tweet;
         Long conversationId = getConversationId(tweet);
-        Set<String> matches = conversationWideEnabled && conversationId != null
-                ? ENGINE.conversationMatches(conversationId, now) : new HashSet<>();
+        if (conversationWideEnabled && conversationId != null) {
+            ENGINE.rememberTweetConversation(tweet.N, conversationId);
+            ENGINE.rememberTweetConversation(tweet.U, conversationId);
+        }
+        // Keep direct keyword evidence separate from conversation inheritance.
+        Set<String> matches = new HashSet<>();
         ENGINE.collectMatches(tweet.V, matches);
         // Collect every matching rule, so expiry of one does not discard other valid reasons.
         try {
@@ -125,31 +131,14 @@ public final class StrictKeywordMute {
 
     /** Re-check time even when no new post was parsed at the schedule boundary. */
     public static synchronized boolean shouldRemoveEntry(String entryId) {
+        if (!SettingsStatus.strictKeywordMute) return false;
         if (!preferencesInitialized) initializePreferences();
         if (!enabled || entryId == null) return false;
         long now = System.currentTimeMillis();
         ENGINE.refresh(now, ZoneId.systemDefault());
         if (!ENGINE.hasActiveRules()) return false;
-        long value = 0;
-        boolean readingDigits = false;
-        for (int i = 0; i <= entryId.length(); i++) {
-            char c = i < entryId.length() ? entryId.charAt(i) : '\0';
-            if (c >= '0' && c <= '9') {
-                readingDigits = true;
-                int digit = c - '0';
-                if (value > (Long.MAX_VALUE - digit) / 10) {
-                    readingDigits = false;
-                    value = 0;
-                    continue;
-                }
-                value = value * 10 + digit;
-            } else if (readingDigits) {
-                if (ENGINE.isTweetMuted(value, now)) return true;
-                readingDigits = false;
-                value = 0;
-            }
-        }
-        return false;
+        return app.morphe.extension.twitter.patches.keywordmute.MuteEntryIds.any(entryId,
+                id -> ENGINE.isTweetMuted(id, now, conversationWideEnabled));
     }
 
     private static void collectTweetModel(Object tweet, IdentityHashMap<Object, Boolean> visited,

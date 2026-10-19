@@ -92,7 +92,7 @@ public class TimelineEntry {
     public static JsonTimelineEntry checkEntry(JsonTimelineEntry jsonTimelineEntry) {
         try {
             String entryId = jsonTimelineEntry.a;
-            if (isEntryIdRemove(entryId) || StrictKeywordMute.shouldRemoveEntry(entryId)) {
+            if (isEntryIdRemove(entryId) || (StrictKeywordMute.shouldRemoveEntry(entryId) || app.morphe.extension.twitter.patches.accountmute.AccountMute.shouldRemoveEntry(entryId))) {
                 return null;
             }
         } catch (Exception ignored) {
@@ -102,7 +102,7 @@ public class TimelineEntry {
     public static JsonTimelineModuleItem checkEntry(JsonTimelineModuleItem jsonTimelineModuleItem) {
         try {
             String entryId = jsonTimelineModuleItem.a;
-            if (isEntryIdRemove(entryId) || StrictKeywordMute.shouldRemoveEntry(entryId)) {
+            if (isEntryIdRemove(entryId) || (StrictKeywordMute.shouldRemoveEntry(entryId) || app.morphe.extension.twitter.patches.accountmute.AccountMute.shouldRemoveEntry(entryId))) {
                 return null;
             }
         } catch (Exception ignored) {
