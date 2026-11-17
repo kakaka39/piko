@@ -457,7 +457,7 @@ https://github.com/crimera/piko/blob/dev/docs/about_login_token_patch.md
     <string name="piko_account_mute_manage">ミュートするアカウント</string>
     <string name="piko_account_mute_summary">同じアカウントに複数の期間を登録できます。追加時は既存の設定を保持します。改行・カンマ・空白で複数を一括入力できます。ユーザー名変更時は設定を更新してください。期限後はタイムラインを更新してください。</string>
     <string name="piko_account_mute_empty">アカウントは登録されていません</string>
-    <string name="piko_account_mute_add">スケジュールを追加</string>
+    <string name="piko_account_mute_add">アカウントを追加</string>
     <string name="piko_mute_selected">%s件選択中</string>
     <string name="piko_mute_edit_schedules">スケジュールを編集</string>
     <string name="piko_mute_all">すべて選択</string>

@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -174,8 +175,20 @@ public final class KeywordMutePreference extends Preference {
                 labels[i] = summary(snapshot.get(i));
                 selected[i] = snapshot.get(i).stream().anyMatch(rule -> rule.id.equals(initialId));
             }
+            LinearLayout content = new LinearLayout(getContext());
+            content.setOrientation(LinearLayout.VERTICAL);
+            ListView choices = new ListView(getContext());
+            choices.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+            choices.setAdapter(new ArrayAdapter<>(getContext(),
+                    android.R.layout.simple_list_item_multiple_choice, labels));
+            for (int i = 0; i < selected.length; i++) choices.setItemChecked(i, selected[i]);
+            // Only the list shrinks when space is limited; keep the actions visible below it.
+            content.addView(choices, new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
             LinearLayout footer = new LinearLayout(getContext());
             footer.setOrientation(LinearLayout.VERTICAL);
+            content.addView(footer, new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             int padding = (int) (20 * getContext().getResources().getDisplayMetrics().density);
             footer.setPadding(padding, 0, padding, 0);
             LinearLayout actions = section(footer);
@@ -188,17 +201,17 @@ public final class KeywordMutePreference extends Preference {
             error.setVisibility(View.GONE);
             AlertDialog picker = new AlertDialog.Builder(getContext())
                     .setTitle(str("piko_mute_selected", "0"))
-                    .setMultiChoiceItems(labels, selected, (dialog, index, checked) -> {
-                        selected[index] = checked;
-                        updateSelection((AlertDialog) dialog, selected, delete);
-                    })
-                    .setView(footer)
+                    .setView(content)
                     .setPositiveButton(str("piko_mute_edit_schedules"), null)
                     .setNegativeButton(android.R.string.cancel, null).create();
             picker.show();
+            choices.setOnItemClickListener((parent, view, index, id) -> {
+                selected[index] = choices.isItemChecked(index);
+                updateSelection(picker, selected, delete);
+            });
             updateSelection(picker, selected, delete);
             all.setOnClickListener(view -> {
-                for (int i = 0; i < selected.length; i++) { selected[i] = true; picker.getListView().setItemChecked(i, true); }
+                for (int i = 0; i < selected.length; i++) { selected[i] = true; choices.setItemChecked(i, true); }
                 updateSelection(picker, selected, delete);
             });
             picker.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(view -> {

@@ -489,7 +489,7 @@ It's recommended to read this before using this feature. It includes some import
     <string name="piko_account_mute_manage">Muted accounts</string>
     <string name="piko_account_mute_summary">Register multiple periods per account. Add schedules without replacing existing ones; use newlines, commas or spaces to enter several handles. Update rules after a username change. Refresh the timeline after expiry.</string>
     <string name="piko_account_mute_empty">No accounts registered</string>
-    <string name="piko_account_mute_add">Add schedules</string>
+    <string name="piko_account_mute_add">Add account</string>
     <string name="piko_mute_selected">%s selected</string>
     <string name="piko_mute_edit_schedules">Edit schedules</string>
     <string name="piko_mute_all">Select all</string>

@@ -22,6 +22,9 @@ long-press a keyword to select it, select several keywords or all, check the liv
 selection count and disabled actions for zero selections; edit the selected periods
 and enabled states without changing keyword text, delete selected rules, and cancel
 without changing storage;
+with enough keywords to exceed the screen height, verify only the choices scroll
+and Select all, Delete, Cancel and Edit schedules remain visible; repeat with
+large system text and a short landscape window;
 cancel each picker, check duplicate/past/equal-boundary validation, cross a
 schedule boundary with X open, refresh the timeline after expiry, and export
 and restore settings. Weekly boundaries use device-local time; a DST gap moves

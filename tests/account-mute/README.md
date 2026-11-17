@@ -20,6 +20,9 @@ duplicate and malformed multi-line batches; verify Save persists immediately
 without a review dialog and Cancel leaves storage untouched; long-press an account
 schedule to open selection with that schedule checked; verify the live selection
 count, select-all, zero-selection disabled actions, bulk edit, bulk delete and cancel;
+with many account rows and multi-line batches exceeding the screen height, verify
+only the choices scroll and all selection actions remain visible, including with
+large system text and a short landscape window;
 ensure unselected schedules for the same account survive; cross an end minute while the app remains open;
 check authors, replies, repost actors, repost sources and nested quotes; restore
 old and new backups. Handles are exact identifiers; update rules after a rename.
