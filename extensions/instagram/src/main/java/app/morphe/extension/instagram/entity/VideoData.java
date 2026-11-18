@@ -7,9 +7,9 @@
 
 package app.morphe.extension.instagram.entity;
 
-import app.morphe.extension.crimera.downloader.MediaType;
+import app.morphe.extension.crimera.legacydownloader.MediaType;
 
-public class VideoData extends Entity implements MediaInterface {
+public class VideoData extends Entity implements VideoVariant {
     public VideoData(Object obj) {
         super(obj);
     }

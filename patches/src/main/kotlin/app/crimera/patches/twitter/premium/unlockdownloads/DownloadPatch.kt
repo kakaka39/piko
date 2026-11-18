@@ -18,9 +18,9 @@ import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLa
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.instructions
 import app.morphe.patcher.extensions.InstructionExtensions.removeInstruction
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.util.smali.ExternalLabel
-import app.morphe.util.registersUsed
+import app.morphe.patcher.util.registersUsed
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
@@ -55,11 +55,13 @@ private object MediaEntityFingerprint : Fingerprint(
 // Credits to @iKirby
 @Suppress("unused")
 val downloadPatch =
-    bytecodePatch(
+    patch(
         name = "Download patch",
         description = "Unlocks the ability to download videos and gifs from Twitter/X",
+        default = false,
     ) {
         compatibleWith(COMPATIBILITY_X)
+        category("Legacy")
         dependsOn(settingsPatch)
 
         execute {
@@ -115,17 +117,20 @@ val downloadPatch =
                 """.trimIndent(),
             )
 
-            // force add download option in immersive bottomsheet
+            // Force showDownloadButton in the immersive fullscreen sheet.
+            // The state constructor stores booleans in this order:
+            // autoAdvanceEnabled, showDownloadButton, showNotInterestedOption.
+            // The old last-IPUT hook changed showNotInterestedOption instead.
             val method4 = ImmersiveBottomSheetPatchFingerprint.method
             val instructions4 = method4.instructions
-
-            val last_iput_loc = instructions4.last { it.opcode == Opcode.IPUT_BOOLEAN }.location.index
-            val iput_reg = method4.getInstruction<OneRegisterInstruction>(last_iput_loc).registerA
+            val booleanStores = instructions4.filter { it.opcode == Opcode.IPUT_BOOLEAN }
+            val downloadStore = booleanStores.getOrNull(1)
+                ?: error("Immersive sheet state constructor changed: expected showDownloadButton store")
+            val downloadStoreIndex = downloadStore.location.index
+            val downloadRegister = method4.getInstruction<OneRegisterInstruction>(downloadStoreIndex).registerA
             method4.addInstruction(
-                last_iput_loc,
-                """
-                const v${iput_reg}, 0x1
-                """.trimIndent(),
+                downloadStoreIndex,
+                "const/4 v$downloadRegister, 0x1",
             )
 
             enableSettings("enableVidDownload")

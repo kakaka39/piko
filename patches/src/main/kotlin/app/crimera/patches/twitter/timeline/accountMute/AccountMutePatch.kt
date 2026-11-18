@@ -20,6 +20,7 @@ val accountMutePatch = bytecodePatch(
     default = false,
 ) {
     compatibleWith(COMPATIBILITY_X)
+    category("Legacy")
     dependsOn(settingsPatch, tweetInfoHook, timelineEntryHookPatch)
     execute { enableSettings("accountMute") }
 }

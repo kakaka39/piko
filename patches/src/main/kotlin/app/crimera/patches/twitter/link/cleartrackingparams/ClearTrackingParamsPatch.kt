@@ -9,12 +9,13 @@ package app.crimera.patches.twitter.link.cleartrackingparams
 import app.crimera.patches.twitter.misc.settings.settingsPatch
 import app.crimera.patches.twitter.utils.Constants.COMPATIBILITY_X
 import app.crimera.patches.twitter.utils.enableSettings
+import app.crimera.patches.utils.ShapeFingerprint
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.addInstruction
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 
 // https://github.com/FrozenAlex/revanced-patches-new
-internal object AddSessionTokenFingerprint : Fingerprint(
+internal object AddSessionTokenFingerprint : ShapeFingerprint(
     parameters =
         listOf(
             "Ljava/lang/String;",
@@ -32,12 +33,13 @@ internal object AddSessionTokenFingerprint : Fingerprint(
 
 @Suppress("unused")
 val clearTrackingParamsPatch =
-    bytecodePatch(
+    patch(
         name = "Clear tracking params",
         description = "Removes tracking parameters when sharing links",
-        default = true,
+        default = false,
     ) {
         compatibleWith(COMPATIBILITY_X)
+        category("Legacy")
         dependsOn(settingsPatch)
 
         execute {

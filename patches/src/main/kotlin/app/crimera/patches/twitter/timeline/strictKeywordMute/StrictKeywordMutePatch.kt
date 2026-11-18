@@ -36,6 +36,7 @@ val strictKeywordMutePatch =
         default = false,
     ) {
         compatibleWith(COMPATIBILITY_X)
+        category("Legacy")
         dependsOn(settingsPatch, tweetInfoHook, timelineEntryHookPatch)
 
         execute {
