@@ -10,19 +10,20 @@ import app.crimera.patches.settings.settingStrings
 import app.crimera.patches.settings.toggle
 import app.crimera.patches.newx.settings.newXSettings
 import app.crimera.patches.newx.utils.Constants.COMPATIBILITY_NEW_X
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 
 private const val OBJECT_BROWSER_HANDLER = "Lapp/morphe/extension/newx/misc/NewXObjectBrowserHandler;"
 
 @Suppress("unused")
 val newXBrowseObjectPatch =
-    bytecodePatch(
+    patch(
         name = "NewX: Browse tweet object",
         description = "Adds a debug option to browse the tweet object in NewX post menus.",
         default = false,
     ) {
         unsupportedOnMount(default = false)
         compatibleWith(COMPATIBILITY_NEW_X)
+        category("NewX patches")
 
         newXSettings {
             category(Categories.ADVANCED) {

@@ -2,8 +2,10 @@
 
 `custom/piko` in `kakaka39/piko` includes both the existing custom Twitter
 patches and the three custom NewX patches transferred from the local
-`custom/piko-newx` worktree. NewX support uses upstream `crimera/piko` `x-lite`
-commit `25743f5205937a8f8892994958e02ec7eab83e00`. The custom NewX sources
+`custom/piko-newx` worktree. The bundle is updated to upstream `crimera/piko`
+tag `v3.12.0-dev.4` (`03c0a79d`), including its NewX patches and Morphe Patcher
+2.4.0 migration. The previous NewX base was `x-lite` commit
+`25743f5205937a8f8892994958e02ec7eab83e00`. The custom NewX sources
 originally came from `kakaka39/piko-newx` commit
 `7c8c19b201f2660d516beb896f73b46f928b7e2e`.
 

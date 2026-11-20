@@ -10,7 +10,8 @@ import app.crimera.patches.common.scopedMatchAll
 import app.morphe.patcher.Match
 import app.morphe.patcher.extensions.InstructionExtensions.instructions
 import app.morphe.patcher.patch.PatchException
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.classDefByOrNull
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.patcher.util.getReference
 import app.morphe.patcher.util.registersUsed
@@ -619,11 +620,12 @@ private fun requireMatches(
 
 @Suppress("unused")
 val newXDownloadPatch =
-    bytecodePatch(
+    patch(
         name = "NewX: Unlock downloads",
         description = "Unlocks media downloads and offline video saving in NewX.",
     ) {
         compatibleWith(COMPATIBILITY_NEW_X)
+        category("NewX patches")
 
         execute {
             val premium = requireExactlyOne(

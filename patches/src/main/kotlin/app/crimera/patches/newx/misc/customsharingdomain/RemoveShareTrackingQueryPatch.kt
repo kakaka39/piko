@@ -5,16 +5,17 @@ import app.crimera.patches.newx.settings.newXToggle
 import app.crimera.patches.newx.utils.Constants.COMPATIBILITY_NEW_X
 import app.crimera.patches.newx.utils.unsupportedOnMount
 import app.crimera.patches.settings.settingStrings
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 
 @Suppress("unused")
 val newXRemoveShareTrackingQueryPatch =
-    bytecodePatch(
+    patch(
         name = "NewX: Remove share tracking parameters",
         description = "Adds a Links setting to remove the a= and s= attribution parameters from shared X URLs.",
     ) {
         unsupportedOnMount()
         compatibleWith(COMPATIBILITY_NEW_X)
+        category("NewX patches")
 
         newXToggle(
             id = "newx.links.remove_share_tracking_query",

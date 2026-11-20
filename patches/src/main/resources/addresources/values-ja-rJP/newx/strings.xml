@@ -1,5 +1,5 @@
-<resources>
-    <string name="piko_pref_strict_keyword_mute">厳密なキーワードミュート</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>    <string name="piko_pref_strict_keyword_mute">厳密なキーワードミュート</string>
     <string name="piko_pref_strict_keyword_mute_desc">設定したキーワードを含むポストを非表示にします</string>
     <string name="piko_pref_strict_keyword_mute_conversations">会話全体をミュート</string>
     <string name="piko_pref_strict_keyword_mute_conversations_desc">ミュートキーワードに一致するポストがある場合、その会話全体を非表示にします</string>

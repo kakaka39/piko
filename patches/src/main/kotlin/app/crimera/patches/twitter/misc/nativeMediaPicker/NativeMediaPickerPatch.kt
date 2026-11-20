@@ -16,7 +16,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.methodCall
 import app.morphe.patcher.patch.PatchException
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.patcher.util.getReference
 import app.morphe.patcher.util.registersUsed
@@ -258,13 +258,13 @@ private object InlineComposerMediaResultCallbackFingerprint : Fingerprint(
 
 @Suppress("unused")
 val nativeMediaPickerPatch =
-    bytecodePatch(
+    patch(
         name = "Use Android document picker for composer",
         description = "Opens Android's file picker directly, including gallery apps, when adding images to new posts and replies.",
         default = false,
     ) {
         compatibleWith(COMPATIBILITY_X)
-        category("Legacy")
+        category("Old patches")
         dependsOn(sharedExtensionPatch)
 
         execute {

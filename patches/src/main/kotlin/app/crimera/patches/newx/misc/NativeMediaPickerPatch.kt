@@ -1,12 +1,12 @@
 package app.crimera.patches.newx.misc
 
+import app.morphe.patcher.patch.mutableClassDefBy
 import app.crimera.patches.common.scopedMatchAll
 import app.crimera.patches.newx.misc.extension.newXExtensionPatch
 import app.crimera.patches.newx.utils.CUSTOM_NEW_X_COMPATIBILITY
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.methodCall
-import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patcher.patch.bytecodeContext
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.util.getReference
@@ -21,12 +21,13 @@ private const val CONTRACT = "Landroidx/activity/result/contract/ActivityResultC
 private const val REPLACEMENT = "Lapp/morphe/extension/newx/mute/NativeMediaPicker;"
 
 @Suppress("unused")
-val newXNativeMediaPickerPatch = bytecodePatch(
+val newXNativeMediaPickerPatch = patch(
     name = "NewX: Use Android document picker for composer",
     description = "Uses the Android file picker with gallery app support for composer media selection.",
     default = false,
 ) {
     compatibleWith(CUSTOM_NEW_X_COMPATIBILITY)
+    category("NewX patches")
     dependsOn(newXExtensionPatch)
     execute {
         val matches = Fingerprint(
@@ -36,7 +37,7 @@ val newXNativeMediaPickerPatch = bytecodePatch(
         if (matches.isEmpty()) throw PatchException("NewX composer media contracts were not found")
         // AndroidX publishes this contract as final in some builds. The replacement overrides
         // createIntent and inherits the original parser and synchronous-result behavior.
-        bytecodeContext.mutableClassDefBy(CONTRACT).apply {
+        mutableClassDefBy(CONTRACT).apply {
             accessFlags = accessFlags and AccessFlags.FINAL.value.inv()
             methods.filter { it.name == "createIntent" || it.name == "parseResult" }.forEach {
                 it.accessFlags = it.accessFlags and AccessFlags.FINAL.value.inv()

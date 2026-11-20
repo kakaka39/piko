@@ -16,7 +16,7 @@ import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.patch.PatchException
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.util.smali.ExternalLabel
 
 private object TimelineItemConversionFingerprint : Fingerprint(
@@ -30,13 +30,13 @@ private object TimelineItemConversionFingerprint : Fingerprint(
 
 @Suppress("unused")
 val strictKeywordMutePatch =
-    bytecodePatch(
+    patch(
         name = "Strict keyword mute",
         description = "Filters posts containing muted keywords using strict substring matching.",
         default = false,
     ) {
         compatibleWith(COMPATIBILITY_X)
-        category("Legacy")
+        category("Old patches")
         dependsOn(settingsPatch, tweetInfoHook, timelineEntryHookPatch)
 
         execute {

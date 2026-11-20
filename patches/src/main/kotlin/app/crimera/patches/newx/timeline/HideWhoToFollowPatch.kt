@@ -7,16 +7,17 @@ import app.crimera.patches.settings.settingStrings
 import app.crimera.patches.settings.toggle
 import app.crimera.patches.newx.settings.newXSettings
 import app.crimera.patches.newx.utils.Constants.COMPATIBILITY_NEW_X
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 
 @Suppress("unused")
 val newXHideWhoToFollowPatch =
-    bytecodePatch(
+    patch(
         name = "NewX: Hide who to follow",
         description = "Hides recommended-user sections (\"Who to follow\") from NewX timelines and profile pages.",
     ) {
         unsupportedOnMount()
         compatibleWith(COMPATIBILITY_NEW_X)
+        category("NewX patches")
         dependsOn(newXTimelineModelAdapterPatch, newXTimelineFilterPatch)
 
         newXSettings {

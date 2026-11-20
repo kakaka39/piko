@@ -11,16 +11,16 @@ import app.crimera.patches.twitter.misc.settings.settingsPatch
 import app.crimera.patches.twitter.timeline.tweetinfo.tweetInfoHook
 import app.crimera.patches.twitter.utils.Constants.COMPATIBILITY_X
 import app.crimera.patches.twitter.utils.enableSettings
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 
 @Suppress("unused")
-val accountMutePatch = bytecodePatch(
+val accountMutePatch = patch(
     name = "Account mute",
     description = "Hide posts, reposts and quotes involving selected accounts, with individual schedules.",
     default = false,
 ) {
     compatibleWith(COMPATIBILITY_X)
-    category("Legacy")
+    category("Old patches")
     dependsOn(settingsPatch, tweetInfoHook, timelineEntryHookPatch)
     execute { enableSettings("accountMute") }
 }

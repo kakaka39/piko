@@ -1,5 +1,8 @@
 package app.crimera.patches.newx.timeline.postfilter
 
+import app.morphe.patcher.patch.classDefByOrNull
+import app.morphe.patcher.patch.mutableClassDefBy
+import app.morphe.patcher.patch.classDefBy
 import app.morphe.patcher.util.p0Register
 import app.morphe.util.cloneMutable
 import app.crimera.patches.common.requireExactlyOne
@@ -13,8 +16,7 @@ import app.crimera.patches.newx.timeline.newXTimelineFilterPatch
 import app.crimera.patches.settings.customScreen
 import app.crimera.patches.settings.settingStrings
 import app.crimera.patches.settings.toggle
-import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patcher.patch.bytecodeContext
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.string
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
@@ -22,16 +24,16 @@ import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 private const val OBJECT = "Ljava/lang/Object;"
 private const val BRIDGES = "Lapp/morphe/extension/newx/mute/MuteModel;"
 
-internal val scheduledMuteModelPatch = bytecodePatch(default = false) {
+internal val scheduledMuteModelPatch = patch(default = false) {
     dependsOn(newXTimelineTextModelAdapterPatch, newXPostModelResolutionPatch)
     execute {
         fun formatter(type: String) = requireExactlyOne(
             "NewX scheduled mute model formatter $type",
-            bytecodeContext.classDefBy(type).methods.filter { it.name == "toString" },
+            classDefBy(type).methods.filter { it.name == "toString" },
         )
         val posts = resolvedNewXPostModels()
         val timeline = resolvedNewXTimelineModels()
-        val bridge = bytecodeContext.mutableClassDefBy(BRIDGES)
+        val bridge = mutableClassDefBy(BRIDGES)
         fun helper(name: String) = bridge.requireBridge(name, OBJECT, OBJECT).let { original ->
             original.cloneMutable(additionalRegisters = 2).also { replacement ->
                 bridge.methods.remove(original)
@@ -39,7 +41,7 @@ internal val scheduledMuteModelPatch = bytecodePatch(default = false) {
             }
         }
         fun field(name: String, reference: FieldReference) {
-            bytecodeContext.mutableClassDefBy(reference.definingClass).requirePublicFields(listOf(reference))
+            mutableClassDefBy(reference.definingClass).requirePublicFields(listOf(reference))
             val method = helper(name)
             method.patchBridge {
                 val receiver = method.p0Register
@@ -74,7 +76,7 @@ internal val scheduledMuteModelPatch = bytecodePatch(default = false) {
             filters = listOf(string("NotePost(postEntityList=")),
         ).requireSingle("loaded note post")
         field("noteText", loadedNote.originalMethod.fieldForToStringLabelThroughAppendHelper(", text=") {
-            bytecodeContext.classDefByOrNull(it)
+            classDefByOrNull(it)
         } ?: loadedNote.fieldForToStringLabel(", text="))
         val author = canonical.fieldForToStringLabel(", author=")
         field("author", author)
@@ -102,13 +104,14 @@ internal val scheduledMuteModelPatch = bytecodePatch(default = false) {
 }
 
 @Suppress("unused")
-val scheduledKeywordMutePatch = bytecodePatch(
+val scheduledKeywordMutePatch = patch(
     name = "NewX: Strict keyword mute with schedules",
     description = "Strict keyword matching with expiry, weekly schedules and conversation filtering.",
     default = false,
 ) {
     unsupportedOnMount(default = false)
     compatibleWith(CUSTOM_NEW_X_COMPATIBILITY)
+    category("NewX patches")
     dependsOn(scheduledMuteModelPatch, newXTimelineFilterPatch)
     newXSettings {
         category(Categories.CONTENT) {
@@ -121,13 +124,14 @@ val scheduledKeywordMutePatch = bytecodePatch(
 }
 
 @Suppress("unused")
-val scheduledAccountMutePatch = bytecodePatch(
+val scheduledAccountMutePatch = patch(
     name = "NewX: Account mute with schedules",
     description = "Exact account matching with independent schedules and grouped account rules.",
     default = false,
 ) {
     unsupportedOnMount(default = false)
     compatibleWith(CUSTOM_NEW_X_COMPATIBILITY)
+    category("NewX patches")
     dependsOn(scheduledMuteModelPatch, newXTimelineFilterPatch)
     newXSettings {
         category(Categories.CONTENT) {

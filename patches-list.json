@@ -1,12 +1,39 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "3.11.1",
+  "version": "3.12.0-dev.4",
   "patches": [
+    {
+      "name": "Account mute",
+      "description": "Hide posts, reposts and quotes involving selected accounts, with individual schedules.",
+      "default": false,
+      "category": "Old patches",
+      "compatiblePackages": [
+        {
+          "packageName": "com.twitter.android",
+          "name": "Twitter",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#000000",
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "12.19.1-release.0",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
     {
       "name": "Add ability to copy media link",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -61,8 +88,8 @@
     {
       "name": "Block redirecting to X Lite",
       "description": "Blocks redirecting to the new X Android UI on launch",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -88,8 +115,8 @@
     {
       "name": "Block update screen",
       "description": "Blocks the 'This app is out of date' update screen from being shown on launch",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -116,7 +143,7 @@
       "name": "Bring back twitter",
       "description": "Bring back old twitter logo and name",
       "default": false,
-      "category": "Legacy",
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -142,8 +169,8 @@
     {
       "name": "Change app icon",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -198,8 +225,8 @@
     {
       "name": "Clear tracking params",
       "description": "Removes tracking parameters when sharing links",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -273,8 +300,8 @@
     {
       "name": "Control video auto scroll",
       "description": "Control video auto scroll in immersive view",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -329,8 +356,8 @@
     {
       "name": "Custom download folder",
       "description": "Change the download directory for video downloads",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -356,8 +383,8 @@
     {
       "name": "Custom emoji font",
       "description": "Customise emoji font style",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -412,8 +439,8 @@
     {
       "name": "Custom font",
       "description": "Customise font style",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -439,8 +466,8 @@
     {
       "name": "Custom share menu",
       "description": "Overrides existing share menu and adds a new one",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -495,8 +522,8 @@
     {
       "name": "Custom sharing domain",
       "description": "Allows for using domains like fxtwitter when sharing tweets/posts.",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -522,8 +549,8 @@
     {
       "name": "Customise post font size",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -607,8 +634,8 @@
     {
       "name": "Customize Inline action Bar items",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -634,8 +661,8 @@
     {
       "name": "Customize Navigation Bar items",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -661,8 +688,8 @@
     {
       "name": "Customize default reply sorting",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -688,8 +715,8 @@
     {
       "name": "Customize explore tabs",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -744,8 +771,8 @@
     {
       "name": "Customize notification tabs",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -771,8 +798,8 @@
     {
       "name": "Customize profile tabs",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -798,8 +825,8 @@
     {
       "name": "Customize search suggestions",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -825,8 +852,8 @@
     {
       "name": "Customize search tab items",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -852,8 +879,8 @@
     {
       "name": "Customize side bar items",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -879,8 +906,8 @@
     {
       "name": "Customize timeline top bar",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -906,8 +933,8 @@
     {
       "name": "Delete from database",
       "description": "Delete entries from database(cache)",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -932,7 +959,7 @@
     },
     {
       "name": "Disable Play Store updates",
-      "description": "Disables Play Store updates by setting the version code to the maximum allowed. This patch may cause unexpected issues with some apps and does not work if the app is installed by root mounting",
+      "description": "Prevents the patched app from being listed in Play Store updates by setting the version code to the maximum allowed. This also allows downgrading an existing app install to an older app version.",
       "default": true,
       "category": null,
       "compatiblePackages": [
@@ -947,6 +974,31 @@
           "targets": [
             {
               "version": "12.19.1-release.0",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.twitter.android",
+          "name": "NewX",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#000000",
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -1038,8 +1090,8 @@
     {
       "name": "Disable auto timeline scroll on launch",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -1065,8 +1117,8 @@
     {
       "name": "Disable chirp font",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -1237,6 +1289,35 @@
     {
       "name": "Disable highlights",
       "description": null,
+      "default": true,
+      "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "com.instagram.android",
+          "name": "Instagram",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#FC483C",
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "452.1.0.53.64",
+              "versionCodes": {
+                "ARM64_V8A": 385811006
+              },
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Disable onboarding permission prompts",
+      "description": "Prevents contacts and location permission onboarding prompts from appearing",
       "default": true,
       "category": null,
       "compatiblePackages": [
@@ -1469,8 +1550,8 @@
     {
       "name": "Download patch",
       "description": "Unlocks the ability to download videos and gifs from Twitter/X",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -1526,7 +1607,7 @@
       "name": "Dynamic color",
       "description": "Replaces the default Twitter Blue with the user's Material You palette.",
       "default": false,
-      "category": "Legacy",
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -1552,8 +1633,8 @@
     {
       "name": "Enable PiP mode automatically",
       "description": "Enables PiP mode when you close the app",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -1579,8 +1660,8 @@
     {
       "name": "Enable Undo Posts",
       "description": "Enables ability to undo posts before posting",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -1606,8 +1687,8 @@
     {
       "name": "Enable debug menu for posts",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -1633,8 +1714,8 @@
     {
       "name": "Enable force HD videos",
       "description": "Videos will be played in highest quality always",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -1661,7 +1742,7 @@
       "name": "Export all activities",
       "description": "Makes all app activities exportable.",
       "default": false,
-      "category": "Legacy",
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -1743,6 +1824,33 @@
       "options": []
     },
     {
+      "name": "Fix 20 photos support",
+      "description": "Fix the issue where photos turn black in gallery for posts containing more than 4 images. This patch does not increase the limit for posting.",
+      "default": true,
+      "category": "Old patches",
+      "compatiblePackages": [
+        {
+          "packageName": "com.twitter.android",
+          "name": "Twitter",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#000000",
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "12.19.1-release.0",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Focus Lock",
       "description": "Commitment mode for cutting down on Instagram. Pick what to block (Reels, Explore) and a duration; once locked those protections are forced on and cannot be switched off. Reels shared with you still open. Unlocking early requires a 24 hour cooling-off period, and resetting or importing settings is blocked while locked.",
       "default": true,
@@ -1774,8 +1882,8 @@
     {
       "name": "Force enable translate",
       "description": "Get translate option for all posts",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -1830,8 +1938,8 @@
     {
       "name": "Handle custom twitter links",
       "description": "Adds support for opening custom twitter links such as vxtwitter, fxtwitter, and fixupx within the app. These will have to be manually enabled under the \"Open by default\" section in the app info!",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -1912,8 +2020,8 @@
     {
       "name": "Hide Banner",
       "description": "Hide new post banner",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -1939,8 +2047,8 @@
     {
       "name": "Hide Community Notes",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -1966,8 +2074,8 @@
     {
       "name": "Hide FAB",
       "description": "Adds an option to hide Floating action button",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -1993,8 +2101,8 @@
     {
       "name": "Hide FAB Menu Buttons",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -2020,8 +2128,8 @@
     {
       "name": "Hide Live Threads",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -2047,8 +2155,8 @@
     {
       "name": "Hide Recommended Users",
       "description": "Hide recommended users that pops up when you follow someone",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -2103,8 +2211,8 @@
     {
       "name": "Hide badges from navigation bar icons",
       "description": "Hides notification nudges & counts from navigation bar icons",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -2130,8 +2238,8 @@
     {
       "name": "Hide bookmark icon in timeline",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -2157,8 +2265,8 @@
     {
       "name": "Hide community badges",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -2213,8 +2321,8 @@
     {
       "name": "Hide followed by context",
       "description": "Hides followed by context under profile",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -2269,8 +2377,8 @@
     {
       "name": "Hide hidden replies",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -2325,8 +2433,8 @@
     {
       "name": "Hide immersive player",
       "description": "Removes swipe up for more videos in video player",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -2410,8 +2518,8 @@
     {
       "name": "Hide nudge button",
       "description": "Hides follow/subscribe/follow back buttons on posts",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -2437,8 +2545,8 @@
     {
       "name": "Hide post metrics",
       "description": "Hides like, reposts etc counts.",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -2464,8 +2572,8 @@
     {
       "name": "Hide promote button",
       "description": "Hides promote button under self posts",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -2491,8 +2599,8 @@
     {
       "name": "Hide recommendation items",
       "description": "Adds options to hide recommendation items such as \"Who to follow\" and \"Today's news\" in timeline, search, and replies.",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -2692,8 +2800,8 @@
     {
       "name": "Hook feature flag",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -2719,8 +2827,8 @@
     {
       "name": "Import/Export login token",
       "description": "Adds an feature to export and import the token of accounts. This is useful when logging in on your second device or when re-installing piko.",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -2804,8 +2912,8 @@
     {
       "name": "Legacy share links",
       "description": "Brings back username on post share links. Works post 11.4x.xx",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -2860,8 +2968,8 @@
     {
       "name": "Log server response",
       "description": "Log json responses received from server",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3003,8 +3111,8 @@
     {
       "name": "More information on profile",
       "description": "Adds more details on the profile page",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3088,8 +3196,8 @@
     {
       "name": "Native downloader",
       "description": "Requires X 11.0.0-release.0 or higher.",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3115,8 +3223,8 @@
     {
       "name": "Native reader mode",
       "description": "Requires X 11.0.0-release.0 or higher.",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3142,8 +3250,8 @@
     {
       "name": "Native translator",
       "description": "Requires X 11.0.0-release.0 or higher.",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3167,10 +3275,10 @@
       "options": []
     },
     {
-      "name": "NewX: Browse tweet object",
-      "description": "Adds a debug option to browse the tweet object in NewX post menus.",
+      "name": "NewX: Account mute with schedules",
+      "description": "Exact account matching with independent schedules and grouped account rules.",
       "default": false,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3182,28 +3290,41 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
               "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "NewX: Browse tweet object",
+      "description": "Adds a debug option to browse the tweet object in NewX post menus.",
+      "default": false,
+      "category": "NewX patches",
+      "compatiblePackages": [
+        {
+          "packageName": "com.twitter.android",
+          "name": "NewX",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#000000",
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
             {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3218,7 +3339,7 @@
       "name": "NewX: Clone",
       "description": "Changes the package name and the app name. This allows you to install the patched X alongside the original X or other patched X.",
       "default": false,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3230,28 +3351,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3285,7 +3392,7 @@
       "name": "NewX: Crash logs",
       "description": "Saves crash logs and shows a notification with share and copy actions.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3297,28 +3404,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3333,7 +3426,7 @@
       "name": "NewX: Custom font",
       "description": "Customise font style",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3345,28 +3438,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3381,7 +3460,7 @@
       "name": "NewX: Custom sharing domain",
       "description": "Allows for using domains like fxtwitter when sharing tweets/posts.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3393,28 +3472,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3429,7 +3494,7 @@
       "name": "NewX: Customize drawer items",
       "description": "Lets you hide selected items from the NewX navigation drawer, and optionally add Messages and Grok shortcuts.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3441,28 +3506,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3477,7 +3528,7 @@
       "name": "NewX: Customize inline actions",
       "description": "Lets you hide selected actions from NewX post action bars.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3489,28 +3540,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3525,7 +3562,7 @@
       "name": "NewX: Customize media menu items",
       "description": "Lets you hide selected items from the NewX photo and video long-press menu.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3537,28 +3574,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3573,7 +3596,7 @@
       "name": "NewX: Customize navigation bar",
       "description": "Reorder, hide, and replace NewX bottom navigation bar items.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3585,28 +3608,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3621,7 +3630,7 @@
       "name": "NewX: Customize post menu items",
       "description": "Lets you hide selected items from the NewX post menu.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3633,28 +3642,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3669,7 +3664,7 @@
       "name": "NewX: Customize profile tabs",
       "description": "Reorder and hide the tabs shown on profile screens.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3681,28 +3676,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3717,7 +3698,7 @@
       "name": "NewX: Customize timeline tabs",
       "description": "Lets you hide the For You or Following tab from the NewX home timeline.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3729,28 +3710,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3765,7 +3732,7 @@
       "name": "NewX: Disable automatic timeline refresh",
       "description": "Prevents automatic timeline jumps on startup and foregrounding.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3777,28 +3744,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3813,7 +3766,7 @@
       "name": "NewX: Disable blur effects",
       "description": "Disables Haze blur in NewX Compose UI while preserving configured fallback tint and scrim effects.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3825,28 +3778,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3861,7 +3800,7 @@
       "name": "NewX: Disable video player scrolling",
       "description": "Disables vertical swipes in the NewX video player while keeping playback controls and other gestures available.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3873,28 +3812,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3909,7 +3834,7 @@
       "name": "NewX: Enable quality-of-life feature flags",
       "description": "Enables profile Photos and Videos tabs and sharing post screenshots.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3921,28 +3846,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3957,7 +3868,7 @@
       "name": "NewX: Feature switch overrides",
       "description": "Adds searchable, typed NewX feature switch overrides.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -3969,28 +3880,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4005,7 +3902,7 @@
       "name": "NewX: Filter For You by topic",
       "description": "Restricts the NewX For You timeline to selected topics.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4017,28 +3914,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4053,7 +3936,7 @@
       "name": "NewX: Filter posts by keyword",
       "description": "Filters NewX posts using user-defined words and phrases.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4065,28 +3948,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4101,7 +3970,7 @@
       "name": "NewX: Gallery profile Photos tab",
       "description": "Replaces the profile Photos timeline with a three-column media gallery.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4113,28 +3982,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4149,7 +4004,7 @@
       "name": "NewX: Hide AI-generated posts",
       "description": "Hides selected AI-generated posts from NewX timelines.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4161,28 +4016,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4197,7 +4038,7 @@
       "name": "NewX: Hide Discover more",
       "description": "Removes the Discover more module from post-detail timelines.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4209,28 +4050,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4245,7 +4072,7 @@
       "name": "NewX: Hide Spaces bar",
       "description": "Hides the Spaces bar above NewX timelines.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4257,28 +4084,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4293,7 +4106,7 @@
       "name": "NewX: Hide compose button",
       "description": "Removes the compose button from NewX timelines.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4305,28 +4118,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4341,7 +4140,7 @@
       "name": "NewX: Hide new posts pill",
       "description": "Hides the new posts pill in NewX timelines.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4353,28 +4152,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4389,7 +4174,7 @@
       "name": "NewX: Hide post author actions",
       "description": "Hides the Follow and Message buttons for post authors on post details.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4401,28 +4186,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4437,7 +4208,7 @@
       "name": "NewX: Hide post dividers",
       "description": "Removes post and reply dividers shown in NewX timelines.",
       "default": false,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4449,28 +4220,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4485,7 +4242,7 @@
       "name": "NewX: Hide post reply bar",
       "description": "Hides the persistent post-detail reply bar while keeping the compose button available.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4497,28 +4254,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4533,7 +4276,7 @@
       "name": "NewX: Hide posts by verified account type",
       "description": "Hides posts and replies authored by selected timeline-reported verification types.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4545,28 +4288,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4581,7 +4310,7 @@
       "name": "NewX: Hide premium upsell",
       "description": "Hides the premium upsell chip from the NewX home top bar.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4593,28 +4322,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4629,7 +4344,7 @@
       "name": "NewX: Hide timeline tabs bar",
       "description": "Removes the For You and Following tabs bar from NewX home timelines, with an option to hide the add-tab (+) button.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4641,28 +4356,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4677,7 +4378,7 @@
       "name": "NewX: Hide who to follow",
       "description": "Hides recommended-user sections (\"Who to follow\") from NewX timelines and profile pages.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4689,28 +4390,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4725,7 +4412,7 @@
       "name": "NewX: Inline download button",
       "description": "Adds a Download button below NewX posts and saves media to a folder you choose, with a customizable filename template.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4737,28 +4424,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4773,7 +4446,7 @@
       "name": "NewX: Open canonical URLs",
       "description": "Opens the expanded (canonical) URL directly when clicking links instead of the shortened t.co link.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4785,28 +4458,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4821,7 +4480,7 @@
       "name": "NewX: Permanent share links",
       "description": "Uses stable account and post IDs in shared links when enabled.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4833,28 +4492,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4869,7 +4514,7 @@
       "name": "NewX: Redirect downloads to chosen folder",
       "description": "Saves media downloaded with NewX's own download buttons into the folders chosen for the download feature, using the configured filename template.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4881,28 +4526,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4917,7 +4548,7 @@
       "name": "NewX: Remove ads",
       "description": "Filters promoted posts and modules from NewX timelines.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4929,28 +4560,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -4965,7 +4582,7 @@
       "name": "NewX: Remove share tracking parameters",
       "description": "Adds a Links setting to remove the a= and s= attribution parameters from shared X URLs.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -4977,28 +4594,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -5013,7 +4616,7 @@
       "name": "NewX: Restore Twitter branding",
       "description": "Bring back old Twitter icons and name",
       "default": false,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5025,28 +4628,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -5061,7 +4650,7 @@
       "name": "NewX: Restore pinned home tab",
       "description": "Reopens the pinned list, topic or community tab you last viewed when the app starts.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5073,28 +4662,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -5109,7 +4684,7 @@
       "name": "NewX: Restore timeline position",
       "description": "Persists supported timeline positions, then restores them after the app process restarts.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5121,28 +4696,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -5157,7 +4718,7 @@
       "name": "NewX: Server error logging",
       "description": "Captures parsed NewX server errors in memory and exports them on demand.",
       "default": false,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5169,28 +4730,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -5205,7 +4752,7 @@
       "name": "NewX: Set default media tab",
       "description": "Lets you choose the default sub-tab (Photos or Videos) for the NewX profile media tab.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5217,28 +4764,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -5253,7 +4786,7 @@
       "name": "NewX: Set default profile post sorting",
       "description": "Lets you choose whether profile posts open sorted by the most recent or popular posts.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5265,28 +4798,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -5301,7 +4820,7 @@
       "name": "NewX: Set default reply sorting",
       "description": "Lets you choose the default reply sorting order for NewX post detail.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5313,28 +4832,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -5349,7 +4854,7 @@
       "name": "NewX: Show poll results",
       "description": "Adds an option to show NewX poll results without voting.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5361,28 +4866,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -5397,7 +4888,7 @@
       "name": "NewX: Show sensitive media",
       "description": "Shows sensitive and age-restricted media without confirmation in NewX.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5409,28 +4900,41 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "NewX: Strict keyword mute with schedules",
+      "description": "Strict keyword matching with expiry, weekly schedules and conversation filtering.",
+      "default": false,
+      "category": "NewX patches",
+      "compatiblePackages": [
+        {
+          "packageName": "com.twitter.android",
+          "name": "NewX",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#000000",
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -5445,7 +4949,7 @@
       "name": "NewX: Theme",
       "description": "Chooses between the original NewX colors and the Material You, high-contrast, and Dim themes.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5457,28 +4961,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -5493,7 +4983,7 @@
       "name": "NewX: Translator",
       "description": "Adds a Translate post-menu option and optional inline translation with free or custom translators (Google, FxTwitter, OpenAI-compatible, DeepL, LibreTranslate).",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5505,28 +4995,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -5541,7 +5017,7 @@
       "name": "NewX: Unlock color customization",
       "description": "Unlocks the built-in app color selector for non-Premium users.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5553,28 +5029,14 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -5589,7 +5051,7 @@
       "name": "NewX: Unlock downloads",
       "description": "Unlocks media downloads and offline video saving in NewX.",
       "default": true,
-      "category": null,
+      "category": "NewX patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5601,28 +5063,41 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "12.38.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.39.0-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
-              "version": "12.40.1-prod.01",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            },
-            {
               "version": "12.41.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            },
+            {
+              "version": "12.43.0-prod.01",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "NewX: Use Android document picker for composer",
+      "description": "Uses the Android file picker with gallery app support for composer media selection.",
+      "default": false,
+      "category": "NewX patches",
+      "compatiblePackages": [
+        {
+          "packageName": "com.twitter.android",
+          "name": "NewX",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#000000",
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "12.43.0-prod.01",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -5636,8 +5111,8 @@
     {
       "name": "No shortened URL",
       "description": "Get rid of t.co short urls.",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5692,8 +5167,8 @@
     {
       "name": "Pause search suggestions",
       "description": "Search suggestions will not be saved locally",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5748,8 +5223,8 @@
     {
       "name": "Remove Ads",
       "description": "Removed promoted posts, trends and google ads",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5804,8 +5279,8 @@
     {
       "name": "Remove premium upsell",
       "description": "Removes premium upsells",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5831,8 +5306,8 @@
     {
       "name": "Remove search suggestions",
       "description": "Hide/Remove search suggestion in explore section",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5858,8 +5333,8 @@
     {
       "name": "Remove view count",
       "description": "Removes the view count from the bottom of tweets",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5885,8 +5360,8 @@
     {
       "name": "Restore legacy follower lists",
       "description": "Restores the legacy follower and following list screen.",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -5941,8 +5416,8 @@
     {
       "name": "Round off numbers",
       "description": "Enable or disable rounding off numbers",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -6084,8 +5559,8 @@
     {
       "name": "Selectable Text",
       "description": "Makes bio and username selectable",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -6109,10 +5584,39 @@
       "options": []
     },
     {
+      "name": "Send keyboard GIFs",
+      "description": "Sends GIFs picked in the keyboard's GIF picker as animated images in DMs",
+      "default": true,
+      "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "com.instagram.android",
+          "name": "Instagram",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#FC483C",
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "452.1.0.53.64",
+              "versionCodes": {
+                "ARM64_V8A": 385811006
+              },
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Share Tweet as Image",
       "description": "Share tweets as rendered image. Requires X 11.0.0-release.0 or higher.",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -6138,8 +5642,8 @@
     {
       "name": "Show changelogs",
       "description": "Shows changelogs when new a patch is installed.",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -6165,8 +5669,8 @@
     {
       "name": "Show poll results",
       "description": "Adds an option to show poll results without voting",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -6192,8 +5696,8 @@
     {
       "name": "Show post source label",
       "description": "Source label will be shown only on public posts",
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -6219,8 +5723,81 @@
     {
       "name": "Show sensitive media",
       "description": null,
+      "default": true,
+      "category": "Old patches",
+      "compatiblePackages": [
+        {
+          "packageName": "com.twitter.android",
+          "name": "Twitter",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#000000",
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "12.19.1-release.0",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Spoof client version",
+      "description": "Reports a newer app version to XChat's servers, which refuse old versions with \"Update Required\" (ClientRequiresUpdate). The rest of the app keeps reporting its real version.",
+      "default": true,
+      "category": "Old patches",
+      "compatiblePackages": [
+        {
+          "packageName": "com.twitter.android",
+          "name": "Twitter",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#000000",
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "12.19.1-release.0",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "key": "spoofedVersion",
+          "title": "Reported version name",
+          "description": "Version name XChat sees instead of the app's own.",
+          "required": true,
+          "type": "kotlin.String",
+          "default": "12.44.0-prod.01",
+          "values": null
+        },
+        {
+          "key": "spoofedVersionCode",
+          "title": "Reported version code",
+          "description": "Version code XChat sees. It must belong to the reported version name.",
+          "required": true,
+          "type": "kotlin.Int",
+          "default": 312440001,
+          "values": null
+        }
+      ]
+    },
+    {
+      "name": "Strict keyword mute",
+      "description": "Filters posts containing muted keywords using strict substring matching.",
       "default": false,
-      "category": "Legacy",
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -6246,8 +5823,8 @@
     {
       "name": "Support external downloader",
       "description": null,
-      "default": false,
-      "category": "Legacy",
+      "default": true,
+      "category": "Old patches",
       "compatiblePackages": [
         {
           "packageName": "com.twitter.android",
@@ -6329,6 +5906,33 @@
               "versionCodes": {
                 "ARM64_V8A": 385811006
               },
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Use Android document picker for composer",
+      "description": "Opens Android's file picker directly, including gallery apps, when adding images to new posts and replies.",
+      "default": false,
+      "category": "Old patches",
+      "compatiblePackages": [
+        {
+          "packageName": "com.twitter.android",
+          "name": "Twitter",
+          "description": null,
+          "apkFileType": "APKM",
+          "appIconColor": "#000000",
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "12.19.1-release.0",
+              "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
               "description": null
