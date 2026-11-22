@@ -61,6 +61,9 @@ import app.morphe.extension.shared.settings.preference.PikoSharedPrefCategory;
 /** Independent scheduled mute screens using the same components as Piko post filtering. */
 @SuppressWarnings("deprecation")
 public abstract class MuteRulesFragment extends CustomScreenFragment {
+    private static final float EDITOR_SECTION_GAP_DP = 16f;
+    private static final float EDITOR_LABEL_GAP_DP = 8f;
+    private static final float EDITOR_CONTROL_HEIGHT_DP = 48f;
     private static final DateTimeFormatter DATE_TIME = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
     private boolean accounts;
     private Manager manager;
@@ -486,8 +489,8 @@ public abstract class MuteRulesFragment extends CustomScreenFragment {
             ZoneId zone = ZoneId.systemDefault();
             LinearLayout form = new LinearLayout(context);
             form.setOrientation(LinearLayout.VERTICAL);
-            int padding = (int) (20 * context.getResources().getDisplayMetrics().density);
-            form.setPadding(padding, padding / 2, padding, 0);
+            int padding = Theme.dpToPx(context, 24f);
+            form.setPadding(padding, Theme.dpToPx(context, 8f), padding, 0);
             EditText keyword = SettingsUi.textInput(context,
                     str(accounts ? "piko_account_mute_input" : "piko_mute_keyword"),
                     InputType.TYPE_CLASS_TEXT | (accounts || bulkPeriod ? InputType.TYPE_TEXT_FLAG_MULTI_LINE : 0));
@@ -502,14 +505,14 @@ public abstract class MuteRulesFragment extends CustomScreenFragment {
             form.addView(keyword);
             TextView periodLabel = label(form, str("piko_mute_period"));
             LinearLayout.LayoutParams periodLabelParams = new LinearLayout.LayoutParams(-1, -2);
-            periodLabelParams.topMargin = Theme.dpToPx(context, 20f);
-            periodLabelParams.bottomMargin = Theme.dpToPx(context, 6f);
+            periodLabelParams.topMargin = Theme.dpToPx(context, EDITOR_SECTION_GAP_DP);
+            periodLabelParams.bottomMargin = Theme.dpToPx(context, EDITOR_LABEL_GAP_DP);
             periodLabel.setLayoutParams(periodLabelParams);
             Spinner mode = spinner(form, new String[]{str("piko_mute_always"), str("piko_mute_until"), str("piko_mute_weekly")});
             mode.setSelection(original == null ? 0 : original.mode.ordinal());
 
             LinearLayout expiryForm = section(form);
-            expiryForm.setPadding(0, Theme.dpToPx(context, 12f), 0, 0);
+            expiryForm.setPadding(0, Theme.dpToPx(context, EDITOR_SECTION_GAP_DP), 0, 0);
             long defaultUntil = ZonedDateTime.now(zone).plusHours(1).withSecond(0).withNano(0).toInstant().toEpochMilli();
             long[] until = {original != null && original.mode == KeywordMuteRule.Mode.UNTIL ? original.until : defaultUntil};
             ButtonView date = button(expiryForm, "");
@@ -539,7 +542,7 @@ public abstract class MuteRulesFragment extends CustomScreenFragment {
             });
 
             LinearLayout weeklyForm = section(form);
-            weeklyForm.setPadding(0, Theme.dpToPx(context, 12f), 0, 0);
+            weeklyForm.setPadding(0, Theme.dpToPx(context, EDITOR_SECTION_GAP_DP), 0, 0);
             label(weeklyForm, str("piko_mute_start"));
             String[] days = new String[7];
             for (int i = 0; i < 7; i++) days[i] = day(i + 1);
@@ -551,7 +554,7 @@ public abstract class MuteRulesFragment extends CustomScreenFragment {
             timeButton(startRow, startMinute);
             TextView endLabel = label(weeklyForm, str("piko_mute_end"));
             LinearLayout.LayoutParams endLabelParams = new LinearLayout.LayoutParams(-1, -2);
-            endLabelParams.topMargin = Theme.dpToPx(context, 16f);
+            endLabelParams.topMargin = Theme.dpToPx(context, EDITOR_SECTION_GAP_DP);
             endLabel.setLayoutParams(endLabelParams);
             LinearLayout endRow = scheduleRow(weeklyForm);
             Spinner endDay = spinner(endRow, days);
@@ -571,6 +574,10 @@ public abstract class MuteRulesFragment extends CustomScreenFragment {
             TextView error = label(form, "");
             error.setAccessibilityLiveRegion(View.ACCESSIBILITY_LIVE_REGION_POLITE);
             error.setTextColor(Color.rgb(244, 33, 46));
+            error.setVisibility(View.GONE);
+            LinearLayout.LayoutParams errorParams = new LinearLayout.LayoutParams(-1, -2);
+            errorParams.topMargin = Theme.dpToPx(context, EDITOR_SECTION_GAP_DP);
+            error.setLayoutParams(errorParams);
             DialogView editor = new DialogView(context)
                     .setTitle(str(bulkPeriod ? "piko_mute_edit_schedules" : accounts
                             ? "piko_account_mute_manage" : original == null ? "piko_mute_add" : "piko_mute_edit"))
@@ -584,21 +591,21 @@ public abstract class MuteRulesFragment extends CustomScreenFragment {
                 String entered = keyword.getText().toString();
                 String normalized = KeywordMuteRule.normalize(entered);
                 if (!accounts && !bulkPeriod && (normalized.isEmpty() || entered.contains("\n") || entered.contains("\r"))) {
-                    error.setText(str("piko_mute_keyword_error")); return;
+                    showError(error, str("piko_mute_keyword_error")); return;
                 }
                 KeywordMuteRule.Mode selected = KeywordMuteRule.Mode.values()[mode.getSelectedItemPosition()];
                 if (selected == KeywordMuteRule.Mode.UNTIL && until[0] <= System.currentTimeMillis()
                         && (original == null || original.mode != selected || original.until != until[0])) {
-                    error.setText(str("piko_mute_past_error")); return;
+                    showError(error, str("piko_mute_past_error")); return;
                 }
                 if (selected == KeywordMuteRule.Mode.WEEKLY && startDay.getSelectedItemPosition() == endDay.getSelectedItemPosition()
                         && startMinute[0] == endMinute[0]) {
-                    error.setText(str("piko_mute_week_error")); return;
+                    showError(error, str("piko_mute_week_error")); return;
                 }
                 if (accounts) {
                     AccountTargets.Batch parsed = AccountTargets.parse(entered);
                     if (parsed.handles.isEmpty() || !parsed.invalid.isEmpty()) {
-                        error.setText(str("piko_account_mute_invalid") + "\n" + String.join("\n", parsed.invalid)); return;
+                        showError(error, str("piko_account_mute_invalid") + "\n" + String.join("\n", parsed.invalid)); return;
                     }
                     KeywordMuteRule period = new KeywordMuteRule("period", parsed.handles.get(0), original == null || original.enabled,
                             selected, until[0], startDay.getSelectedItemPosition() + 1, startMinute[0],
@@ -608,8 +615,8 @@ public abstract class MuteRulesFragment extends CustomScreenFragment {
                         saveRules(preserveEnabledStates(current,
                                 AccountMuteStore.withSchedules(current, parsed.handles, period, editedIds)));
                         editor.dismiss(); reload();
-                    } catch (IllegalArgumentException e) { error.setText(str("piko_mute_data_changed")); }
-                    catch (Exception e) { error.setText(str("piko_mute_save_error")); }
+                    } catch (IllegalArgumentException e) { showError(error, str("piko_mute_data_changed")); }
+                    catch (Exception e) { showError(error, str("piko_mute_save_error")); }
                     return;
                 }
                 try {
@@ -628,10 +635,10 @@ public abstract class MuteRulesFragment extends CustomScreenFragment {
                         KeywordMuteRule other = updated.get(i);
                         if (original != null && other.id.equals(original.id)) index = i;
                         else if (other.normalizedKeyword.equals(normalized)) {
-                            error.setText(str("piko_mute_duplicate_error")); return;
+                            showError(error, str("piko_mute_duplicate_error")); return;
                         }
                     }
-                    if (original != null && index < 0) { error.setText(str("piko_mute_data_changed")); return; }
+                    if (original != null && index < 0) { showError(error, str("piko_mute_data_changed")); return; }
                     KeywordMuteRule rule = new KeywordMuteRule(original == null ? UUID.randomUUID().toString() : original.id,
                             keyword.getText().toString(), index < 0 || updated.get(index).enabled, selected, until[0],
                             startDay.getSelectedItemPosition() + 1, startMinute[0], endDay.getSelectedItemPosition() + 1, endMinute[0]);
@@ -639,8 +646,8 @@ public abstract class MuteRulesFragment extends CustomScreenFragment {
                     saveRules(updated);
                     editor.dismiss();
                     reload();
-                } catch (IllegalArgumentException e) { error.setText(str("piko_mute_data_changed")); }
-                catch (Exception e) { error.setText(str("piko_mute_save_error")); }
+                } catch (IllegalArgumentException e) { showError(error, str("piko_mute_data_changed")); }
+                catch (Exception e) { showError(error, str("piko_mute_save_error")); }
             });
             if (original != null) {
                 ButtonView remove = new ButtonView(context, ButtonView.ButtonStyle.TEXT, str("piko_mute_delete"));
@@ -652,7 +659,7 @@ public abstract class MuteRulesFragment extends CustomScreenFragment {
                         saveRules(updated);
                         editor.dismiss();
                         reload();
-                    } catch (Exception e) { error.setText(str("piko_mute_save_error")); }
+                    } catch (Exception e) { showError(error, str("piko_mute_save_error")); }
                 });
                 editor.addButton(remove);
             }
@@ -663,8 +670,7 @@ public abstract class MuteRulesFragment extends CustomScreenFragment {
         private void timeButton(LinearLayout form, int[] value) {
             ButtonView button = button(form, time(value[0]));
             button.setMinWidth(Theme.dpToPx(requireContext(), 80f));
-            button.setMinHeight(Theme.dpToPx(requireContext(), 48f));
-            button.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+            button.setGravity(Gravity.CENTER);
             button.setPadding(button.getPaddingLeft(), 0, button.getPaddingRight(), 0);
             button.setOnClickListener(view -> {
                 TimePickerDialog pickerDialog = new TimePickerDialog(requireContext(), (picker, hour, minute) -> {
@@ -693,6 +699,10 @@ public abstract class MuteRulesFragment extends CustomScreenFragment {
 
     private static String day(int day) { return DayOfWeek.of(day).getDisplayName(TextStyle.FULL, Locale.getDefault()); }
     private static String time(int minute) { return String.format(Locale.getDefault(), "%02d:%02d", minute / 60, minute % 60); }
+    private static void showError(TextView error, String message) {
+        error.setText(message);
+        error.setVisibility(View.VISIBLE);
+    }
     private TextView label(LinearLayout form, String text) {
         TextView label = SettingsUi.summaryText(requireContext()); label.setText(text); form.addView(label); return label;
     }
@@ -703,20 +713,22 @@ public abstract class MuteRulesFragment extends CustomScreenFragment {
     private LinearLayout scheduleRow(LinearLayout form) {
         LinearLayout row = new LinearLayout(requireContext());
         row.setOrientation(LinearLayout.HORIZONTAL);
-        // Keep the weekday at the same top inset as the period spinner. The time
-        // button retains a 48dp touch target without centering the shorter spinner.
-        row.setGravity(Gravity.TOP);
-        row.setMinimumHeight(Theme.dpToPx(requireContext(), 48f));
+        // Match the period control and center both values in the same touch target.
+        row.setGravity(Gravity.CENTER_VERTICAL);
+        row.setMinimumHeight(Theme.dpToPx(requireContext(), EDITOR_CONTROL_HEIGHT_DP));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(-1, -2);
-        params.topMargin = Theme.dpToPx(requireContext(), 6f);
+        params.topMargin = Theme.dpToPx(requireContext(), EDITOR_LABEL_GAP_DP);
         form.addView(row, params);
         return row;
     }
     private ButtonView button(LinearLayout form, String text) {
-        ButtonView button = new ButtonView(requireContext(), ButtonView.ButtonStyle.TEXT, text); form.addView(button); return button;
+        ButtonView button = new ButtonView(requireContext(), ButtonView.ButtonStyle.TEXT, text);
+        button.setMinHeight(Theme.dpToPx(requireContext(), EDITOR_CONTROL_HEIGHT_DP));
+        form.addView(button); return button;
     }
     private Spinner spinner(LinearLayout form, String[] items) {
         Spinner spinner = new Spinner(requireContext());
+        spinner.setMinimumHeight(Theme.dpToPx(requireContext(), EDITOR_CONTROL_HEIGHT_DP));
         ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, items);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter); form.addView(spinner); return spinner;
