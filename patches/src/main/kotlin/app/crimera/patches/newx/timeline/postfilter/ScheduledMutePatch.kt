@@ -115,8 +115,8 @@ val scheduledKeywordMutePatch = patch(
     dependsOn(scheduledMuteModelPatch, newXTimelineFilterPatch)
     newXSettings {
         category(Categories.CONTENT) {
-            toggle(id = "newx.custom.keyword_mute.enabled", strings = settingStrings("piko_newx_custom_keyword_mute"), order = 410, defaultValue = true)
-            toggle(id = "newx.custom.keyword_mute.conversations", strings = settingStrings("piko_newx_custom_mute_conversations"), order = 411, defaultValue = false)
+            toggle(id = "newx.custom.keyword_mute.enabled", strings = settingStrings("piko_newx_custom_keyword_mute"), order = 410, defaultValue = true, visible = false)
+            toggle(id = "newx.custom.keyword_mute.conversations", strings = settingStrings("piko_newx_custom_mute_conversations"), order = 411, defaultValue = false, visible = false)
             customScreen(id = "newx.custom.keyword_mute.rules", strings = settingStrings("piko_newx_custom_keyword_rules"), order = 412,
                 fragmentClassDescriptor = "Lapp/morphe/extension/newx/mute/KeywordMuteFragment;")
         }
@@ -135,7 +135,7 @@ val scheduledAccountMutePatch = patch(
     dependsOn(scheduledMuteModelPatch, newXTimelineFilterPatch)
     newXSettings {
         category(Categories.CONTENT) {
-            toggle(id = "newx.custom.account_mute.enabled", strings = settingStrings("piko_newx_custom_account_mute"), order = 420, defaultValue = true)
+            toggle(id = "newx.custom.account_mute.enabled", strings = settingStrings("piko_newx_custom_account_mute"), order = 420, defaultValue = true, visible = false)
             customScreen(id = "newx.custom.account_mute.rules", strings = settingStrings("piko_newx_custom_account_rules"), order = 421,
                 fragmentClassDescriptor = "Lapp/morphe/extension/newx/mute/AccountMuteFragment;")
         }

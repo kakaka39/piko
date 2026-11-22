@@ -49,10 +49,12 @@
     <string name="piko_newx_custom_keyword_mute_summary">期間指定キーワードミュート</string>
     <string name="piko_newx_custom_mute_conversations_title">一致する投稿を含む会話をミュート</string>
     <string name="piko_newx_custom_mute_conversations_summary">一致する投稿を含む会話をミュート</string>
-    <string name="piko_newx_custom_keyword_rules_title">キーワードの期間を管理</string>
-    <string name="piko_newx_custom_keyword_rules_summary">キーワードの期間を管理</string>
+    <string name="piko_newx_custom_keyword_rules_title">ミュートするキーワード</string>
+    <string name="piko_newx_custom_keyword_rules_summary">ミュートするキーワード</string>
     <string name="piko_newx_custom_account_mute_title">期間指定アカウントミュート</string>
     <string name="piko_newx_custom_account_mute_summary">期間指定アカウントミュート</string>
-    <string name="piko_newx_custom_account_rules_title">アカウントの期間を管理</string>
-    <string name="piko_newx_custom_account_rules_summary">アカウントの期間を管理</string>
+    <string name="piko_newx_custom_account_rules_title">ミュートするアカウント</string>
+    <string name="piko_newx_custom_account_rules_summary">ミュートするアカウント</string>
+    <string name="piko_newx_custom_keyword_mute_enabled">キーワードミュートを有効にする</string>
+    <string name="piko_newx_custom_account_mute_enabled">アカウントミュートを有効にする</string>
 </resources>

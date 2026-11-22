@@ -563,4 +563,6 @@
     <string name="piko_newx_custom_account_mute_summary">Scheduled account mute</string>
     <string name="piko_newx_custom_account_rules_title">Manage account schedules</string>
     <string name="piko_newx_custom_account_rules_summary">Manage account schedules</string>
+    <string name="piko_newx_custom_keyword_mute_enabled">Enable keyword muting</string>
+    <string name="piko_newx_custom_account_mute_enabled">Enable account muting</string>
 </resources>

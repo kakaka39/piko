@@ -12,6 +12,14 @@ android {
         checkOnly += setOf("NewApi")
         abortOnError = true
     }
+
+    // View tests need the real shared settings implementation. Keep them separate from
+    // the ordinary JVM tests, which provide lightweight stand-ins for those classes.
+    if (providers.gradleProperty("newxMuteUiTests").isPresent) {
+        sourceSets.named("test") {
+            java.setSrcDirs(listOf("src/uiTest/java"))
+        }
+    }
 }
 
 // The extension bundle is dexed from the release artifact; check it before packing.
@@ -34,4 +42,8 @@ dependencies {
     testImplementation("org.json:json:20250517")
     testImplementation(project(path = ":extensions:shared:media3", configuration = "shadowedMedia3"))
     testImplementation("org.robolectric:robolectric:4.17")
+    if (providers.gradleProperty("newxMuteUiTests").isPresent) {
+        testImplementation(project(":extensions:shared:library"))
+        testImplementation(libs.morphe.extensions.library)
+    }
 }

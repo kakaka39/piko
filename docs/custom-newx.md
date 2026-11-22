@@ -29,7 +29,18 @@ All three patches are unselected by default. Their compatibility remains
 limited to the version checked during their original development; upstream
 patches retain their own compatibility declarations.
 
-Mute rules are configured under NewX content settings. Rules support indefinite
+Mute rules are configured in dedicated keyword and account screens under NewX
+content settings. Both use the same list rows, switches, floating add button,
+and editor dialog components as Piko's Post filtering screen. They remain
+independent of Post filtering. The content menu contains only the two screen
+entries; global mute and conversation switches are inside the screens, backed
+by the same existing settings. Editors change text and periods while preserving
+each rule's enabled state. Tap a row to edit it, use its switch to enable
+or disable it, and long-press a row to select rules in the same full-page list.
+Selection adds checkboxes to the left of the existing keyword/account labels
+and schedule summaries. The mute switches are disabled during selection;
+cancel, delete, and bulk schedule actions stay below the scrolling list.
+Rules support indefinite
 muting, an expiry time, and weekly periods in the device time zone. Refresh the
 timeline after changing rules or crossing a period boundary. Conversation
 matching relies on parent posts observed in fetched responses and cannot link
@@ -54,11 +65,15 @@ read access, using the upstream `gpr.user` / `gpr.key` Gradle properties or
 ./gradlew.bat buildAndroid :patches:test :patches:lintNewxResolvers :patches:checkStringResources
 ./gradlew.bat :patches:checkExtensionDescriptors '--args=--extensions=build/resources/main/extensions --sources=src/main/kotlin/app/crimera/patches/newx'
 ./tests/newx-mute/run.ps1
+./gradlew.bat :extensions:newx:testDebugUnitTest -PnewxMuteUiTests --tests app.morphe.extension.newx.mute.MuteRulesFragmentTest
 ./tests/account-mute/run.ps1
 ./tests/account-mute/run-patch-guards.ps1
 ```
 
 On Linux, use `./gradlew` and run the test script with `pwsh -File`.
+The `newxMuteUiTests` property selects an isolated Robolectric suite using the
+real shared settings library; ordinary NewX unit tests retain their existing
+lightweight settings stand-ins.
 The standard output is `patches/build/libs/patches-<version>.mpp`, with the
 version taken from `gradle.properties`. Both the custom Twitter patches and
 the custom NewX patches are included in this bundle. Upstream release
